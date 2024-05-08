@@ -1,0 +1,258 @@
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
+
+// Variables
+@import 'variables';
+
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
+
+.smaller-img {
+    width: 500px; /* Ajusta el ancho de la imagen según sea necesario */
+    height: 500px; /* Mantén la proporción del aspecto */
+}
+
+.transparent-img {
+    opacity: 0.7;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.transparent-img:hover {
+    opacity: 1;
+}
+
+.btn-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2; /* Asegura que el botón esté encima de la imagen */
+}
+
+
+.fc-daygrid-day-top .fc-daygrid-day-number {
+    color: #A0404B; /* Cambia el color del número de los días */
+    font-size: 15px;
+}
+
+.modal-content-event, .modal-content-period{
+    background-color: #A0404B; /* Cambia el color de fondo según tus preferencias */
+    border-radius: 15px; /* Añade bordes redondeados */
+    padding: 20px; /* Añade un poco de espacio interno */
+}
+
+.modal-header{
+    color: #ffffff; /* Cambia el color del texto de las etiquetas según tus preferencias */
+}
+
+/* Aplica estilos a los campos del formulario */
+.form-label-event {
+    color: #ffffff; /* Cambia el color del texto de las etiquetas según tus preferencias */
+    font-size: 15px;
+}
+
+/* Estilos para los campos de entrada */
+.form-control-event {
+    background-color: #ffffff; /* Cambia el color de fondo de los campos según tus preferencias */
+    border-color: #cccccc; /* Cambia el color del borde de los campos según tus preferencias */
+}
+
+/* Estilos para el botón de guardar */
+.btn-save-event {
+    margin-top: 15px;
+    background-color: #A0404B; /* Cambia el color de fondo del botón según tus preferencias */
+    color: #ffffff; /* Cambia el color del texto del botón según tus preferencias */
+    border-color: #ffffff; /* Cambia el color del borde del botón según tus preferencias */
+}
+
+/* Cambia el color de fondo cuando se pasa el mouse sobre el botón de guardar */
+.btn-save-event:hover {
+    color: #ffffff;
+    background-color: #e0737e; /* Cambia el color de fondo al pasar el mouse sobre el botón */
+}
+
+/* Estilos para los botones del menú modal */
+#menuModal .modal-body .btn {
+    margin-bottom: 10px; /* Espacio entre botones */
+    width: 100%; /* Ancho completo */
+    color: #A0404B; /* Color del texto */
+    font-size: 15px; /* Tamaño de la fuente */
+    background-color: #e3c7d0; /* Color de fondo de los botones */
+}
+
+/* Estilos para centrar los botones horizontalmente */
+#menuModal .modal-body .btn-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#menuModal .modal-content{
+    background-image: url('/public/SheFlowCalendarModal.png');
+    /* Ajusta el tamaño de la imagen según sea necesario */
+    background-size: cover;
+    /* Centra la imagen vertical y horizontalmente */
+    background-position: center;
+}
+
+
+#calendar{
+    max-width: 900px;
+    margin: 40px auto;
+}
+.articulos-recientes {
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+    color: #A0404B; /* Color del texto */
+}
+
+.linea {
+    border-color: #A0404B;
+    border-width: 3px;
+}
+
+
+body {
+    background-color: $body-bg; /* Cambia el color de fondo aquí */
+}
+
+/* Estilos para el radio button */
+input[type="radio"].form-check-input {
+    transform: scale(1.5); /* Aumentar tamaño */
+    border: 2px solid #A0404B; /* Color del borde oscuro */
+}
+
+/* Cambiar color del radio button cuando está seleccionado */
+input[type="radio"].form-check-input:checked {
+    background-color: $body-bg; /* Color rosa */
+}
+
+.container-fluid {
+    background-color: $body-bg; /* Color de fondo */
+}
+
+.text-center {
+    color: #333; /* Color del texto */
+}
+
+h1 {
+    font-family: 'Nunito', sans-serif; /* Fuente del encabezado */
+    font-size: 2.5rem; /* Tamaño del encabezado */
+    font-weight: bold; /* Peso de la fuente */
+    margin-bottom: 20px; /* Espacio inferior */
+}
+
+p {
+    font-family: 'Nunito', sans-serif; /* Fuente del párrafo */
+    font-size: 1.1rem; /* Tamaño del párrafo */
+    line-height: 1.6; /* Altura de línea */
+    margin-bottom: 20px; /* Espacio inferior */
+}
+
+.vh-100 {
+    height: 100vh; /* Altura del 100% de la ventana */
+}
+
+
+.img-overlay:hover img {
+    filter: brightness(70%);
+    transition: filter 0.3s ease;
+}
+
+.navbar {
+    background-color: #A0404B; /* Rosa */
+    border-radius: 25px; /* Borde redondeado */
+    height: 90px; /* Altura */
+    width: 80%;
+    padding: 20px 20px; /* Ajuste de relleno (padding) */
+    margin: 20px auto; /* Centrar horizontalmente */
+    position: fixed; /* Fijar la barra de navegación */
+    top: 0; /* Colocarla en la parte superior */
+    left: 50%; /* Centrarla horizontalmente */
+    transform: translateX(-50%); /* Ajustar para centrar */
+    z-index: 999; /* Asegurarse de que esté en la parte superior */
+    box-shadow: 0 4px 6px -2px rgba(0, 0, 0, 0.1), 0 -4px 6px -2px rgba(0, 0, 0, 0.1); /* Sombras por arriba y por abajo */
+}
+
+.nav-link-wrapper {
+    margin-left: 10px; /* Espacio entre los enlaces */
+    border: 1px solid #ccc; /* Borde del recuadro */
+    border-radius: 15px; /* Bordes redondeados */
+    padding: 5px 10px; /* Espacio interno del recuadro */
+}
+
+.nav-link-wrapper a {
+    text-decoration: none; /* Elimina el subrayado del enlace */
+    color: #ffffff; /* Color del texto */
+}
+
+.nav-link-wrapper:hover {
+    background-color: #ccb6bc; /* Cambia el color de fondo al pasar el mouse */
+}
+
+.cta {
+    position: relative;
+    margin: auto;
+    padding: 19px 22px;
+    transition: all .2s ease;
+    border: none;
+    background-color: $body-bg;
+    &:before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: block;
+        border-radius: 28px;
+        background: rgba($body-bg, .5);
+        width: 56px;
+        height: 56px;
+        transition: all .3s ease;
+    }
+    span {
+        position: relative;
+        font-size: 16px;
+        line-height: 18px;
+        font-weight: 900;
+        letter-spacing: .25em;
+        text-transform: uppercase;
+        vertical-align: middle;
+    }
+    svg {
+        position: relative;
+        top: 0;
+        margin-left: 10px;
+        fill: none;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke: #111;
+        stroke-width: 2;
+        transform: translateX(-5px);
+        transition: all .3s ease;
+    }
+    &:hover {
+        &:before {
+            width: 100%;
+            background: rgba(#A0404B, 1);
+        }
+        svg {
+            transform: translateX(0);
+        }
+    }
+    &:active {
+        transform: scale(.96);
+    }
+}
+
+.carousel-item img {
+    max-height: 900px; /* Ajusta la altura máxima según tus preferencias */
+    width: auto; /* Permite que el ancho se ajuste automáticamente para mantener la proporción */
+}
+
+
+
+
+
+
+
+
