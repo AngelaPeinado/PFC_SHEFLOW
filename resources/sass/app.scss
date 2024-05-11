@@ -7,6 +7,89 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
+#notas {
+    width:500px;
+    overflow:hidden;
+    background-color:#FFF;
+    color:#222;
+    font-family:Courier, monospace;
+    font-weight:normal;
+    font-size:24px;
+    resize:none;
+    line-height:40px;
+    padding-left:100px;
+    padding-right:100px;
+    padding-top:45px;
+    padding-bottom:34px;
+    background-image:url(https://static.tumblr.com/maopbtg/E9Bmgtoht/lines.png), url(https://static.tumblr.com/maopbtg/nBUmgtogx/paper.png);
+    background-repeat:repeat-y, repeat;
+    -webkit-border-radius:12px;
+    border-radius:12px;
+    -webkit-box-shadow: 0px 2px 14px #000;
+    box-shadow: 0px 2px 14px #000;
+    border-top:1px solid #FFF;
+    border-bottom:1px solid #FFF;
+}
+#title {
+    background-color:transparent;
+    border-bottom:3px solid #FFF;
+    color:#FFF;
+    font-size:20px;
+    font-family:Courier, monospace;
+    height:28px;
+    font-weight:bold;
+    width:220px;
+}
+
+.full-width-container {
+    width: 100%;
+}
+
+
+.checkbox-wrapper-41 {
+    --size: 50px;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"] {
+    -webkit-appearance: none;
+    width: var(--size);
+    height: calc(var(--size) / 2);
+    background-color: #cdb8bd;
+    border: 3px solid #222;
+    border-radius: 30px 100px 100px 100px;
+    box-shadow: 0 10px 20px rgb(205, 184, 189);
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.5s;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"]::before {
+    content: "";
+    position: absolute;
+    width: calc(var(--size) / 2);
+    height: calc(var(--size) / 2);
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scale(0.7);
+    border: 3px solid #222;
+    border-radius: 30px 100px 100px 100px;
+    background-color: #a25861;
+    box-sizing: border-box;
+    transition: all 0.5s;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"]:checked {
+    background-color: #ce8294;
+    border-radius: 100px 100px 30px 100px;
+}
+
+.checkbox-wrapper-41 input[type="checkbox"]:checked::before {
+    left: 50%;
+    background-color: #a0404b;
+    border-radius: 100px 100px 30px 100px;
+}
+
 /* Estilos para cada fila de 3 preguntas */
 .row .card {
     flex-direction: column;
@@ -253,5 +336,75 @@ p {
 
 }
 
+.number-input {
+    margin: 1em auto;
+    max-width: 200px;
+    position: relative;
+    width: 95%;
 
+    input {
+        background-color: rgba(255,255,255,.65);
+        border: 1px solid #666;
+        border-right: 0;
+        box-shadow: 0 0 .5rem rgba(0,0,0,.45);
+        font-size: 1.5em;
+        border-radius: 5px;
+        overflow: hidden;
+        padding: .15em 1.5em;
+        height: 51px;
+        position: relative;
+        transition: .5s ease all;
+        z-index:0;
+        width: 100%;
+
+        &:focus, &:active {
+            background-color: rgba(255,255,255,1);
+            box-shadow: 0 0 1rem rgba(0,0,0,.75);
+            outline: none;
+            transition: .5s ease all;
+        }
+    }
+}
+
+.buttons {
+    border-left: 1px solid #ce8294;
+    border-radius: 0 5px 5px 0;
+    overflow: hidden;
+    float: left;
+    top: 1px;
+    position: absolute;
+    right: 0;
+    width: 26px;
+    z-index: 1;
+}
+
+.increment, .decrement {
+    background: #ce8294;
+    border-right:2px solid #9d3e49;
+    font-weight: bold;
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 26px;
+    padding: .15em 0;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: -1px;
+    width: 25px;
+    z-index: 2;
+
+    &:hover {
+        background: darken(#9d3e49,10%);
+    }
+}
+
+.increment {
+    border-top: 1px solid #444;
+    border-bottom: 1px solid #444;
+    border-radius: 0 5px 0 0;
+}
+.decrement {
+    border-radius: 0 0 5px 0;
+    border-bottom: 1px solid #444;
+}
 

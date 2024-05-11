@@ -90,25 +90,28 @@ class RegistroDiarioController extends Controller
         $notas = $request->input('notas');
 
         // Iterar sobre los síntomas seleccionados y guardarlos en la tabla pivote
-        foreach ($request->input('sintomas') as $opcion_sintoma_nombre) {
-            // Obtener el ID del síntoma
-            $opcion_sintoma_id = Sintoma::where('opcion_sintoma', $opcion_sintoma_nombre)->value('id');
+        foreach ($request->input('sintomas') as $tipo_sintoma_id => $sintomas) {
+            foreach ($sintomas as $opcion_sintoma_nombre) {
+                // Obtener el ID del síntoma
+                $opcion_sintoma_id = Sintoma::where('opcion_sintoma', $opcion_sintoma_nombre)->value('id');
 
-            // Verificar si se encontró el ID del síntoma
-            if ($opcion_sintoma_id) {
-                // Crear un nuevo registro en la tabla PivoteSintoma
-                PivoteSintoma::create([
-                    'fecha' => $fecha,
-                    'user_id' => $user_id,
-                    'opcion_sintoma_id' => $opcion_sintoma_id,
-                    'agua' => $agua,
-                    'pasos' => $pasos,
-                    'temperatura' => $temperatura,
-                    'peso' => $peso,
-                    'notas' => $notas
-                ]);
+                // Verificar si se encontró el ID del síntoma
+                if ($opcion_sintoma_id) {
+                    // Crear un nuevo registro en la tabla PivoteSintoma
+                    PivoteSintoma::create([
+                        'fecha' => $fecha,
+                        'user_id' => $user_id,
+                        'opcion_sintoma_id' => $opcion_sintoma_id,
+                        'agua' => $agua,
+                        'pasos' => $pasos,
+                        'temperatura' => $temperatura,
+                        'peso' => $peso,
+                        'notas' => $notas
+                    ]);
+                }
             }
         }
+
 
         return Redirect::route('inflex');
     }
@@ -135,26 +138,29 @@ class RegistroDiarioController extends Controller
         $notas = $request->input('notas');
 
         // Iterar sobre los ejercicios seleccionados y guardarlos en la tabla pivote
-        foreach ($request->input('ejercicios') as $opcion_ejercicio_nombre) {
-            // Obtener el ID del ejercicio
-            $opcion_ejercicio_id = Ejercicio::where('opcion_ejercicio', $opcion_ejercicio_nombre)->value('id');
+        foreach ($request->input('ejercicios') as $tipo_ejercicio_id => $ejercicios) {
+            foreach ($ejercicios as $opcion_ejercicio_nombre) {
+                // Obtener el ID del ejercicio
+                $opcion_ejercicio_id = Ejercicio::where('opcion_ejercicio', $opcion_ejercicio_nombre)->value('id');
 
-            // Verificar si se encontró el ID del ejercicio
-            if ($opcion_ejercicio_id) {
-                // Crear un nuevo registro en la tabla PivoteEjercicio
-                PivoteEjercicio::create([
-                    'fecha' => $fecha,
-                    'user_id' => $user_id,
-                    'ejercicio_id' => $opcion_ejercicio_id,
-                    'fatiga' => $fatiga,
-                    'molestias' => $molestias,
-                    'motivacion' => $motivacion,
-                    'notas' => $notas
-                ]);
+                // Verificar si se encontró el ID del ejercicio
+                if ($opcion_ejercicio_id) {
+                    // Crear un nuevo registro en la tabla PivoteEjercicio
+                    PivoteEjercicio::create([
+                        'fecha' => $fecha,
+                        'user_id' => $user_id,
+                        'ejercicio_id' => $opcion_ejercicio_id,
+                        'fatiga' => $fatiga,
+                        'molestias' => $molestias,
+                        'motivacion' => $motivacion,
+                        'notas' => $notas
+                    ]);
+                }
             }
         }
 
         return redirect()->route('inflex');
     }
+
 
 }
