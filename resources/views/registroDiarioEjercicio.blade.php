@@ -5,12 +5,19 @@
         <br>
         <br>
         <br>
+        <br>
         <form action="{{ route('storeEjercicios') }}" method="POST">
             @csrf
-            <hr>
-            <label for="fecha" class="form-label fs-5">Fecha:</label>
-            <input type="date" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly required
-                   class="form-control mb-3">
+
+            <div class="container-label">
+                <label for="fecha" class="form-label fs-5 hidden-label">Fecha:</label>
+                <div class="date-input-container">
+                    <input type="date" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly required
+                           class="form-control">
+                    <span class="date-icon"></span>
+                </div>
+                <hr>
+            </div>
             <hr>
             <div class="row">
                 @foreach($tipo_ejercicios as $tipo_ejercicio)

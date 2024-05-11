@@ -7,6 +7,46 @@
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
 
+.hidden-label {
+    display: none; /* Oculta solo las etiquetas con la clase hidden-label */
+}
+
+.container-label{
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centra verticalmente */
+    align-items: center; /* Centra horizontalmente */
+    margin: auto;
+}
+
+
+.date-input-container {
+    position: relative;
+    display: inline-block;
+    font-size: 18px; /* Aumenta el tamaño del contenedor */
+}
+
+.date-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Ajusta el padding a la derecha */
+    transform: translateY(-50%);
+    width: 40px;
+    height: 35px;
+    background-image: url('/public/SheFlowDateIcon.png');
+    background-size: cover;
+    cursor: pointer;
+}
+
+
+/* Estilo adicional para el input de fecha si es necesario */
+.date-input-container input[type="date"] {
+    font-size: 20px;
+    padding-right: 1px; /* Ajusta el padding para que el icono no se solape con el texto */
+    padding-left: 20px;
+}
+
+
 #notas {
     width:500px;
     overflow:hidden;
