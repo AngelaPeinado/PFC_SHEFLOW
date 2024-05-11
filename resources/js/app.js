@@ -4,6 +4,7 @@ import $ from 'jquery';
 
 
 import 'jquery';
+
 $(".increment").on("click", function () {
     var input = $(this).parent().siblings("input[type='number']");
     var value = parseInt(input.val());
@@ -22,7 +23,56 @@ $(".decrement").on("click", function () {
     console.log("Disminuyendo valor a: ", input.val()); // Agrega este console.log para depurar
 });
 
-$(document).ready(function(){
+
+$(document).ready(function () {
+    $(".increment-pasos").on("click", function () {
+        var input = $(this).parent().siblings("input[type='number']");
+        var value = parseInt(input.val());
+        var max = parseInt(input.attr("max")) || Infinity; // Obtener el valor máximo, si no está definido, se utiliza Infinity como valor por defecto
+
+        if (value < max) {
+            // Incrementar los pasos en 500
+            input.val(value + 500);
+        }
+    });
+
+    $(".decrement-pasos").on("click", function () {
+        var input = $(this).parent().siblings("input[type='number']");
+        var value = parseInt(input.val());
+        var min = parseInt(input.attr("min")) || -Infinity; // Obtener el valor mínimo, si no está definido, se utiliza -Infinity como valor por defecto
+
+        if (value > min) {
+            // Disminuir los pasos en 500
+            input.val(value - 500);
+        }
+    });
+
+    $(".increment-agua, .increment-temperatura").on("click", function () {
+        var input = $(this).parent().siblings("input[type='number']");
+        var value = parseFloat(input.val());
+        var step = parseFloat(input.attr("step")) || 0.1; // Obtener el paso, si no está definido, se utiliza 0.1 como valor por defecto
+        var max = parseFloat(input.attr("max")) || Infinity; // Obtener el valor máximo, si no está definido, se utiliza Infinity como valor por defecto
+
+        if (value < max) {
+            // Añadir el paso al valor actual
+            input.val((value + step).toFixed(1)); // Redondear a un decimal
+        }
+    });
+
+    $(".decrement-agua, .decrement-temperatura").on("click", function () {
+        var input = $(this).parent().siblings("input[type='number']");
+        var value = parseFloat(input.val());
+        var step = parseFloat(input.attr("step")) || 0.1; // Obtener el paso, si no está definido, se utiliza 0.1 como valor por defecto
+        var min = parseFloat(input.attr("min")) || -Infinity; // Obtener el valor mínimo, si no está definido, se utiliza -Infinity como valor por defecto
+
+        if (value > min) {
+            // Restar el paso al valor actual
+            input.val((value - step).toFixed(1)); // Redondear a un decimal
+        }
+    });
+});
+
+$(document).ready(function () {
     $('#title').focus();
     $('#text').autosize();
 });
@@ -34,7 +84,7 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function() {
+$(document).ready(function () {
     // Agregar evento de mostrado del modal
     $('#perfilModal').on('shown.bs.modal', function () {
         // Manejar el clic en las imágenes dentro del modal

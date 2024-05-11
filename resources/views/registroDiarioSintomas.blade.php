@@ -9,6 +9,17 @@
         <br>
         <form action="{{ route('storeSintomas') }}" method="POST">
             @csrf
+            <div class="container-label">
+                <label for="fecha" class="form-label fs-5 hidden-label">Fecha:</label>
+                <div class="date-input-container">
+                    <input type="date" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly required
+                           class="form-control">
+                    <span class="date-icon"></span>
+                </div>
+                <hr>
+            </div>
+            <br>
+            <br>
             <div class="row">
                 @foreach($tipo_sintomas as $tipo_sintoma)
                     <div class="col-md-3">
@@ -30,56 +41,65 @@
                     </div>
                 @endforeach
             </div>
-
+            <hr>
             <div class="row">
-                <div class="col-md-3">
-                    <div class="card-custom mb-4">
-                        <div class="card-body">
-                            <label for="fecha" class="form-label fs-5">Fecha:</label>
-                            <input type="date" id="fecha" name="fecha" value="{{ date('Y-m-d') }}" readonly required
-                                   class="form-control">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card-custom mb-4">
                         <div class="card-body">
                             <label for="agua" class="form-label fs-5">Cantidad de Agua (en litros):</label>
-                            <input type="number" step="0.01" id="agua" name="agua" required class="form-control">
+                            <div class="number-input">
+                                <input type="number" id="agua" name="agua" min="0" max="10" value="0" required
+                                       class="form-control mb-3">
+                                <div class="buttons">
+                                    <div class="increment-agua">+</div>
+                                    <div class="decrement-agua">-</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card-custom mb-4">
                         <div class="card-body">
                             <label for="pasos" class="form-label fs-5">Número de Pasos:</label>
-                            <input type="number" id="pasos" name="pasos" class="form-control">
+                            <div class="number-input">
+                                <input type="number" id="pasos" name="pasos" min="0" max="1000000" value="0" required
+                                       class="form-control mb-3">
+                                <div class="buttons">
+                                    <div class="increment-pasos">+</div>
+                                    <div class="decrement-pasos">-</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <div class="card-custom mb-4">
                         <div class="card-body">
                             <label for="temperatura" class="form-label fs-5">Temperatura (en °C):</label>
-                            <input type="number" step="0.01" id="temperatura" name="temperatura" class="form-control">
+                            <div class="number-input">
+                                <input type="number" id="temperatura" name="temperatura" min="30" max="45" value="36"
+                                       required
+                                       class="form-control mb-3">
+                                <div class="buttons">
+                                    <div class="increment-temperatura">+</div>
+                                    <div class="decrement-temperatura">-</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <hr>
+                <div class="full-width-container">
+                    <div class="card-body">
+                        <label for="notas" class="form-label fs-5">Notas:</label>
+                        <textarea placeholder="Escribe alguna nota" id="notas" name="notas" rows="4"
+                                  style="overflow: hidden; word-wrap: break-word; resize: none; height: 160px; "></textarea>
 
-
-
-            <div class="full-width-container">
-                <div class="card-body">
-                    <label for="notas" class="form-label fs-5">Notas:</label>
-                    <textarea placeholder="Escribe alguna nota" id="notas" name="notas" rows="4" style="overflow: hidden; word-wrap: break-word; resize: none; height: 160px; "></textarea>
-
+                    </div>
                 </div>
             </div>
-
+            <hr>
 
             <input type="submit" value="Enviar" class="btn btn-primary btn-lg btn-block mt-4">
         </form>

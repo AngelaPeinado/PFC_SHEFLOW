@@ -18,15 +18,21 @@ class RegistroDiarioController extends Controller
     }
     public function registroDiarioSintomas()
     {
-        // Verificar si hay un registro en la fecha de hoy en la tabla pivoteSintomas
-        $registroHoy = pivoteSintoma::whereDate('created_at', today())->exists();
+        // Verificar si el usuario está autenticado
+        if (auth()->check()) {
+            // Obtener el ID del usuario autenticado
+            $userId = auth()->id();
 
-        // Si hay un registro hoy, redirigir a otra pantalla
-        if ($registroHoy) {
-            return redirect()->route('RegistroDiarioHecho');
+            // Verificar si hay un registro en la fecha de hoy en la tabla pivoteSintomas para el usuario autenticado
+            $registroHoy = pivoteSintoma::whereDate('created_at', today())->where('user_id', $userId)->exists();
+
+            // Si hay un registro hoy, redirigir a la página "RegistroDiarioHecho"
+            if ($registroHoy) {
+                return redirect()->route('RegistroDiarioHecho');
+            }
         }
 
-        // Si no hay registro hoy, continuar con la lógica actual para mostrar la vista de registroDiarioSintomas
+        // Si no hay registro hoy o el usuario no está autenticado, continuar con la lógica actual para mostrar la vista de registroDiarioSintomas
 
         // Obtener todos los tipos de síntomas
         $tipo_sintomas = Sintoma::select('tipo_sintoma')->distinct()->get();
@@ -44,15 +50,21 @@ class RegistroDiarioController extends Controller
 
     public function registroDiarioEjercicios()
     {
-        // Verificar si hay un registro en la fecha de hoy en la tabla pivoteEjercicios
-        $registroHoy = PivoteEjercicio::whereDate('created_at', today())->exists();
+        // Verificar si el usuario está autenticado
+        if (auth()->check()) {
+            // Obtener el ID del usuario autenticado
+            $userId = auth()->id();
 
-        // Si hay un registro hoy, redirigir a otra pantalla
-        if ($registroHoy) {
-            return redirect()->route('RegistroDiarioHecho');
+            // Verificar si hay un registro en la fecha de hoy en la tabla pivoteEjercicios para el usuario autenticado
+            $registroHoy = PivoteEjercicio::whereDate('created_at', today())->where('user_id', $userId)->exists();
+
+            // Si hay un registro hoy, redirigir a la página "RegistroDiarioHecho"
+            if ($registroHoy) {
+                return redirect()->route('RegistroDiarioHecho');
+            }
         }
 
-        // Si no hay registro hoy, continuar con la lógica actual para mostrar la vista de registroDiarioEjercicios
+        // Si no hay registro hoy o el usuario no está autenticado, continuar con la lógica actual para mostrar la vista de registroDiarioEjercicios
 
         // Obtener todos los tipos de ejercicios
         $tipo_ejercicios = Ejercicio::select('tipo_ejercicio')->distinct()->get();
@@ -63,11 +75,11 @@ class RegistroDiarioController extends Controller
         // Obtener las opciones de ejercicios para cada tipo de ejercicio
         foreach ($tipo_ejercicios as $tipo_ejercicio) {
             $opciones_por_tipo[$tipo_ejercicio->tipo_ejercicio] = Ejercicio::where('tipo_ejercicio', $tipo_ejercicio->tipo_ejercicio)->distinct()->pluck('opcion_ejercicio');
-
         }
 
         return view('registroDiarioEjercicio', compact('tipo_ejercicios', 'opciones_por_tipo'));
     }
+
 
     public function storeSintomas(Request $request)
     {
