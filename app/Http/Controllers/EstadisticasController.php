@@ -7,19 +7,28 @@ use App\Models\PivoteSintoma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 
 class EstadisticasController extends Controller
 {
+// Dentro de tu controlador...
     public function index()
     {
-        // Obtener los datos necesarios del controlador
-        $userId = auth()->user()->id;
+        // Obtener el ID del usuario autenticado
+        $userId = Auth::id();
+        // Obtener la fecha actual
         $fechaActual = date('Y-m-d');
+        // Obtener el mes actual
+        $mesActual = date('m');
 
         // Obtener los datos de pasos, agua y temperatura
         $pasosDiarios = $this->pasosDiarios($userId, $fechaActual);
         $cantidadAguaDiaria = $this->aguaDiaria($userId, $fechaActual);
         $temperaturaDiaria = $this->temperaturaDiaria($userId, $fechaActual);
+
+        // Obtener los estados de ánimo por mes actual
+        $estadosAnimoMesActual = $this->obtenerOpcionesAnimoPorMes();
 
         // Otras variables de estadísticas que ya tenías
         $datosCiclo = $this->obtenerDuracionesPeriodo();
@@ -41,11 +50,12 @@ class EstadisticasController extends Controller
             'cantidadAguaDiaria',
             'mediaAguaSemanal',
             'temperaturaDiaria',
-            'mediaTemperaturaSemanal'
+            'mediaTemperaturaSemanal',
+            'estadosAnimoMesActual' // Agregando los estados de ánimo por mes actual
         ));
+
+        dd(estadosAnimoMesActual);
     }
-
-
 
     public function obtenerDuracionesPeriodo()
     {
@@ -220,5 +230,58 @@ class EstadisticasController extends Controller
 
         return $mediaTemperaturaSemanal;
     }
+
+    public function obtenerOpcionesAnimoPorMes()
+    {
+        // Obtener el mes actual del usuario
+        $mesActual = date('m');
+
+        // Obtener las opciones del tipo de síntoma "Ánimo"
+        $opcionesAnimo = DB::table('sintomas')
+            ->select('opcion_sintoma')
+            ->where('tipo_sintoma', 'Ánimo')
+            ->get()
+            ->pluck('opcion_sintoma')
+            ->toArray();
+
+        // Inicializar el array para almacenar el recuento de cada opción
+        $recuentoOpciones = [];
+
+        // Calcular el recuento total de todos los síntomas de ánimo para el mes actual
+        $recuentoTotal = DB::table('pivote_sintomas')
+            ->whereIn('opcion_sintoma_id', function ($query) use ($opcionesAnimo) {
+                $query->select('id')
+                    ->from('sintomas')
+                    ->whereIn('opcion_sintoma', $opcionesAnimo)
+                    ->where('tipo_sintoma', 'Ánimo');
+            })
+            ->whereMonth('fecha', '=', $mesActual)
+            ->count();
+
+        // Recorrer cada opción y calcular su porcentaje con respecto al total
+        foreach ($opcionesAnimo as $opcion) {
+            $recuento = DB::table('pivote_sintomas')
+                ->where('opcion_sintoma_id', function ($query) use ($opcion) {
+                    $query->select('id')
+                        ->from('sintomas')
+                        ->where('opcion_sintoma', $opcion)
+                        ->where('tipo_sintoma', 'Ánimo');
+                })
+                ->whereMonth('fecha', '=', $mesActual)
+                ->count();
+
+            // Calcular el porcentaje y manejar el caso cuando el recuento sea 0
+            $porcentaje = $recuentoTotal != 0 ? ($recuento / $recuentoTotal) * 100 : 0;
+            $recuentoOpciones[] = [
+                'opcion' => $opcion,
+                'porcentaje' => $porcentaje
+            ];
+            //dd($recuento, $recuentoTotal, $porcentaje);
+        }
+
+        return $recuentoOpciones;
+    }
+
+
 
 }

@@ -1,5 +1,9 @@
 <style>
     /* Estilos para el contenedor principal */
+    #chartdivanimo {
+        width: 100%;
+        height: 500px;
+    }
     body {
         background-color: #A0404B;
         background-size: cover;
@@ -88,6 +92,8 @@
 <!-- Resources -->
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
 
 <!-- Chart code -->
@@ -659,6 +665,42 @@
         chartTemperatura.appear(1000, 100);
     });
 </script>
+<script>
+    am5.ready(function() {
+
+        var rootAnimo = am5.Root.new("chartdivanimo");
+        var chartAnimo = rootAnimo.container.children.push(
+            am5percent.PieChart.new(rootAnimo, {})
+        );
+        var seriesAnimo = chartAnimo.series.push(
+            am5percent.PieSeries.new(rootAnimo, {
+                categoryField: "opcionAnimo",
+                valueField: "recuentoAnimo"
+            })
+        );
+
+        // Set data from PHP
+        var dataAnimo = {!! json_encode($estadosAnimoMesActual) !!};
+
+        // Convertir el formato de los datos si es necesario
+        var formattedDataAnimo = dataAnimo.map(function(item) {
+            return { opcionAnimo: item.opcion, recuentoAnimo: parseInt(item.recuento) };
+        });
+
+        seriesAnimo.data.setAll(formattedDataAnimo);
+
+        // Asegurarnos de que la leyenda tenga datos correctos
+        var legendAnimo = chartAnimo.children.push(am5.Legend.new(rootAnimo, {
+            centerX: am5.percent(50),
+            x: am5.percent(50),
+            layout: rootAnimo.horizontalLayout
+        }));
+
+        legendAnimo.data.setAll(seriesAnimo.dataItems);
+
+    });
+</script>
+
 <div class="info-box">
     <h3>ESTADÍSTICAS: CICLOS Y PERIODOS</h3>
     <p><strong>Duración media del ciclo:</strong> {{ $duracionMediaCiclo }} días</p>
@@ -706,6 +748,10 @@
 <div class="info-box">
     <h3>ESTADÍSTICAS: ÁNIMO Y SÍNTOMAS</h3>
 
+</div>
+<div class="chart-container-1">
+    <h2 class="chart-title">Estados de ánimo</h2>
+    <div id="chartdivanimo"></div>
 </div>
 <div class="info-box">
     <h3>ENTRENAMIENTO: FATIGA, MOLESTIAS Y MOTIVACIÓN</h3>
