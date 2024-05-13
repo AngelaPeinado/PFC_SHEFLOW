@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FechaPeriodo;
+use App\Models\PivoteSintoma;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -11,14 +12,39 @@ class EstadisticasController extends Controller
 {
     public function index()
     {
-        $datosCiclo= $this->obtenerDuracionesPeriodo();
-        $duracionCiclos=$this->obtenerDuracionCiclos();
+        // Obtener los datos necesarios del controlador
+        $userId = auth()->user()->id;
+        $fechaActual = date('Y-m-d');
+
+        // Obtener los datos de pasos, agua y temperatura
+        $pasosDiarios = $this->pasosDiarios($userId, $fechaActual);
+        $cantidadAguaDiaria = $this->aguaDiaria($userId, $fechaActual);
+        $temperaturaDiaria = $this->temperaturaDiaria($userId, $fechaActual);
+
+        // Otras variables de estadísticas que ya tenías
+        $datosCiclo = $this->obtenerDuracionesPeriodo();
+        $duracionCiclos = $this->obtenerDuracionCiclos();
         $duracionMediaCiclo = $this->calcularDuracionMediaCicloMenstrual();
         $duracionMediaPeriodo = $this->calcularDuracionMediaPeriodo();
+        $mediaPasosSemanal = $this->mediaPasosSemanal($userId);
+        $mediaAguaSemanal = $this->mediaAguaSemanal($userId);
+        $mediaTemperaturaSemanal = $this->mediaTemperaturaSemanal($userId);
 
-        return view('statistics', compact('duracionCiclos','datosCiclo', 'duracionMediaCiclo', 'duracionMediaPeriodo'));
-
+        // Pasar todos los datos a la vista
+        return view('statistics', compact(
+            'duracionCiclos',
+            'datosCiclo',
+            'duracionMediaCiclo',
+            'duracionMediaPeriodo',
+            'pasosDiarios',
+            'mediaPasosSemanal',
+            'cantidadAguaDiaria',
+            'mediaAguaSemanal',
+            'temperaturaDiaria',
+            'mediaTemperaturaSemanal'
+        ));
     }
+
 
 
     public function obtenerDuracionesPeriodo()
@@ -123,6 +149,76 @@ class EstadisticasController extends Controller
 
         // Devolver la duración media
         return $duracionMedia;
+    }
+
+    public function pasosDiarios($userId, $fecha)
+    {
+        $pasosDiarios = PivoteSintoma::where('user_id', $userId)
+            ->where('fecha', $fecha)
+            ->get(['fecha', 'pasos']); // Seleccionar solo las columnas 'fecha' y 'pasos'
+
+        return $pasosDiarios->toArray(); // Convertir la colección a un array
+    }
+
+    public function aguaDiaria($userId, $fecha)
+    {
+        $aguaDiaria = PivoteSintoma::where('user_id', $userId)
+            ->where('fecha', $fecha)
+            ->get(['fecha', 'agua']); // Seleccionar solo las columnas 'fecha' y 'agua'
+
+        return $aguaDiaria->toArray(); // Convertir la colección a un array
+    }
+
+    public function temperaturaDiaria($userId, $fecha)
+    {
+        $temperaturaDiaria = PivoteSintoma::where('user_id', $userId)
+            ->where('fecha', $fecha)
+            ->get(['fecha', 'temperatura']); // Seleccionar solo las columnas 'fecha' y 'temperatura'
+
+        return $temperaturaDiaria->toArray(); // Convertir la colección a un array
+    }
+
+
+
+    public function mediaPasosSemanal($userId)
+    {
+        $fechaActual = Carbon::now();
+        $inicioSemana = $fechaActual->startOfWeek()->format('Y-m-d');
+        $finSemana = $fechaActual->endOfWeek()->format('Y-m-d');
+
+        $mediaPasosSemanal = PivoteSintoma::where('user_id', $userId)
+            ->whereBetween('fecha', [$inicioSemana, $finSemana])
+            ->avg('pasos');
+
+        return  $mediaPasosSemanal;
+
+    }
+
+    public function mediaAguaSemanal($userId)
+    {
+        $fechaActual = Carbon::now();
+        $inicioSemana = $fechaActual->startOfWeek()->format('Y-m-d');
+        $finSemana = $fechaActual->endOfWeek()->format('Y-m-d');
+
+        $mediaAguaSemanal = PivoteSintoma::where('user_id', $userId)
+            ->whereBetween('fecha', [$inicioSemana, $finSemana])
+            ->avg('agua');
+
+        return $mediaAguaSemanal;
+    }
+
+
+    public function mediaTemperaturaSemanal($userId)
+    {
+        $fechaActual = Carbon::now();
+        $inicioSemana = $fechaActual->startOfWeek()->format('Y-m-d');
+        $finSemana = $fechaActual->endOfWeek()->format('Y-m-d');
+
+        $mediaTemperaturaSemanal = PivoteSintoma::where('user_id', $userId)
+            ->whereBetween('fecha', [$inicioSemana, $finSemana])
+            ->avg('temperatura');
+
+        return $mediaTemperaturaSemanal;
     }
 
 }

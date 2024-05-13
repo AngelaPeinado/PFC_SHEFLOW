@@ -20,6 +20,7 @@
             </div>
             <br>
             <br>
+            <hr>
             <div class="row">
                 @foreach($tipo_sintomas as $tipo_sintoma)
                     <div class="col-md-3">

@@ -10,24 +10,26 @@
         padding: 0; /* Elimina el relleno predeterminado del cuerpo */
     }
 
+
     .chart-container {
-        width: 90%; /* Ancho del contenedor principal */
-        margin: 20px auto; /* Centrar el contenedor en la página y agregar un espacio en la parte superior e inferior */
+        width: 45%;
+        margin: 20px 10px ; /* Ajusta el margen derecho para reducir el espacio entre las gráficas */
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        background-color: #CDB8BD; /* Color de fondo translúcido */
+        background-color: #CDB8BD;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: #A0404B; /* Sombra translúcida */
+        box-shadow: #A0404B;
     }
+
 
     /* Estilos para las gráficas */
     .chart {
-        width: 50%; /* Ancho de la gráfica */
+        width: 80%; /* Ancho de la gráfica */
         height: 500px; /* Altura de la gráfica */
-        margin-bottom: 40px; /* Espacio entre las gráficas */
+        margin-bottom: 5px; /* Espacio entre las gráficas */
     }
 
     /* Estilos para los títulos */
@@ -58,6 +60,13 @@
         font-size: 18px; /* Tamaño de la fuente aumentado */
     }
 
+    .chart-container-wrapper {
+        display: flex;
+        justify-content: space-between; /* Distribuye las gráficas de manera uniforme */
+        margin-bottom: 20px;
+    }
+
+
 </style>
 
 <!-- Resources -->
@@ -67,7 +76,7 @@
 
 <!-- Chart code -->
 <script>
-    am5.ready(function() {
+    am5.ready(function () {
 
         // Create root element
         var root = am5.Root.new("chartdiv");
@@ -151,7 +160,7 @@
             fillGradient: am5.LinearGradient.new(root, {
                 stops: [
                     {}, // will use original column color
-                    { color: am5.color(0x000000) }
+                    {color: am5.color(0x000000)}
                 ]
             }),
             fillPattern: am5.GrainPattern.new(root, {
@@ -185,7 +194,7 @@
 </script>
 <!-- Chart code para la segunda gráfica -->
 <script>
-    am5.ready(function() {
+    am5.ready(function () {
 
         // Create root element
         var root2 = am5.Root.new("chartdiv2");
@@ -269,7 +278,7 @@
             fillGradient: am5.LinearGradient.new(root2, {
                 stops: [
                     {}, // will use original column color
-                    { color: am5.color(0x000000) }
+                    {color: am5.color(0x000000)}
                 ]
             }),
             fillPattern: am5.GrainPattern.new(root2, {
@@ -301,22 +310,388 @@
         chart2.appear(1000, 100);
     });
 </script>
+<script>
+    am5.ready(function () {
+        var rootPasos = am5.Root.new("chartPasosDiarios");
 
+        var chartPasos = rootPasos.container.children.push(am5xy.XYChart.new(rootPasos, {
+            panX: true,
+            panY: true,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0,
+            layout: rootPasos.verticalLayout
+        }));
+
+        // Set colors
+        chartPasos.set("colors", am5.ColorSet.new(rootPasos, {
+            colors: [
+                am5.color(0xF6CBD1),
+                am5.color(0xF9A5AC),
+                am5.color(0xF692AE),
+                am5.color(0xF68698),
+                am5.color(0xF57C82),
+                am5.color(0xF36B7E),
+                am5.color(0xF05C7E)
+            ]
+        }));
+
+        // Create axes
+        var xRendererPasos = am5xy.AxisRendererX.new(rootPasos, {
+            minGridDistance: 50,
+            minorGridEnabled: true
+        });
+
+        xRendererPasos.grid.template.setAll({
+            location: 1
+        });
+
+        var xAxisPasos = chartPasos.xAxes.push(am5xy.CategoryAxis.new(rootPasos, {
+            maxDeviation: 0.3,
+            categoryField: "fecha",
+            renderer: xRendererPasos,
+            tooltip: am5.Tooltip.new(rootPasos, {})
+        }));
+
+        var yAxisPasos = chartPasos.yAxes.push(am5xy.ValueAxis.new(rootPasos, {
+            maxDeviation: 0.3,
+            min: 0,
+            renderer: am5xy.AxisRendererY.new(rootPasos, {
+                strokeOpacity: 0.1
+            })
+        }));
+
+        // Create series
+        var seriesPasos = chartPasos.series.push(am5xy.ColumnSeries.new(rootPasos, {
+            name: "Pasos",
+            xAxis: xAxisPasos,
+            yAxis: yAxisPasos,
+            valueYField: "pasos",
+            categoryXField: "fecha",
+            tooltip: am5.Tooltip.new(rootPasos, {
+                labelText: "{valueY}"
+            }),
+        }));
+
+        seriesPasos.columns.template.setAll({
+            tooltipY: 0,
+            tooltipText: "{categoryX}: {valueY}",
+            shadowOpacity: 0.1,
+            shadowOffsetX: 2,
+            shadowOffsetY: 2,
+            shadowBlur: 1,
+            strokeWidth: 2,
+            stroke: am5.color(0xffffff),
+            shadowColor: am5.color(0x000000),
+            cornerRadiusTL: 50,
+            cornerRadiusTR: 50,
+            fillGradient: am5.LinearGradient.new(rootPasos, {
+                stops: [
+                    {}, // will use original column color
+                    { color: am5.color(0x000000) }
+                ]
+            }),
+            fillPattern: am5.GrainPattern.new(rootPasos, {
+                maxOpacity: 0.15,
+                density: 0.5,
+                colors: [am5.color(0x000000), am5.color(0x000000), am5.color(0xffffff)]
+            })
+        });
+
+        seriesPasos.columns.template.states.create("hover", {
+            shadowOpacity: 1,
+            shadowBlur: 10,
+            cornerRadiusTL: 10,
+            cornerRadiusTR: 10
+        });
+
+        seriesPasos.columns.template.adapters.add("fill", function (fill, target) {
+            return chartPasos.get("colors").getIndex(seriesPasos.columns.indexOf(target));
+        });
+
+        // Set data
+        var pasosData = {!! json_encode($pasosDiarios) !!}; // Obtener los datos del controlador
+
+        xAxisPasos.data.setAll(pasosData);
+        seriesPasos.data.setAll(pasosData);
+
+        // Make stuff animate on load
+        seriesPasos.appear(1000);
+        chartPasos.appear(1000, 100);
+    });
+</script>
+<script>
+    am5.ready(function () {
+        var rootAgua = am5.Root.new("chartCantidadAguaDiaria");
+
+        var chartAgua = rootAgua.container.children.push(am5xy.XYChart.new(rootAgua, {
+            panX: true,
+            panY: true,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0,
+            layout: rootAgua.verticalLayout
+        }));
+
+        // Set colors
+        chartAgua.set("colors", am5.ColorSet.new(rootAgua, {
+            colors: [
+                am5.color(0xF6CBD1),
+                am5.color(0xF9A5AC),
+                am5.color(0xF692AE),
+                am5.color(0xF68698),
+                am5.color(0xF57C82),
+                am5.color(0xF36B7E),
+                am5.color(0xF05C7E)
+            ]
+        }));
+
+        // Create axes
+        var xRendererAgua = am5xy.AxisRendererX.new(rootAgua, {
+            minGridDistance: 50,
+            minorGridEnabled: true
+        });
+
+        xRendererAgua.grid.template.setAll({
+            location: 1
+        });
+
+        var xAxisAgua = chartAgua.xAxes.push(am5xy.CategoryAxis.new(rootAgua, {
+            maxDeviation: 0.3,
+            categoryField: "fecha",
+            renderer: xRendererAgua,
+            tooltip: am5.Tooltip.new(rootAgua, {})
+        }));
+
+        var yAxisAgua = chartAgua.yAxes.push(am5xy.ValueAxis.new(rootAgua, {
+            maxDeviation: 0.3,
+            min: 0,
+            renderer: am5xy.AxisRendererY.new(rootAgua, {
+                strokeOpacity: 0.1
+            })
+        }));
+
+        // Create series
+        var seriesAgua = chartAgua.series.push(am5xy.ColumnSeries.new(rootAgua, {
+            name: "Agua",
+            xAxis: xAxisAgua,
+            yAxis: yAxisAgua,
+            valueYField: "agua",
+            categoryXField: "fecha",
+            tooltip: am5.Tooltip.new(rootAgua, {
+                labelText: "{valueY}"
+            }),
+        }));
+
+        seriesAgua.columns.template.setAll({
+            tooltipY: 0,
+            tooltipText: "{categoryX}: {valueY}",
+            shadowOpacity: 0.1,
+            shadowOffsetX: 2,
+            shadowOffsetY: 2,
+            shadowBlur: 1,
+            strokeWidth: 2,
+            stroke: am5.color(0xffffff),
+            shadowColor: am5.color(0x000000),
+            cornerRadiusTL: 50,
+            cornerRadiusTR: 50,
+            fillGradient: am5.LinearGradient.new(rootAgua, {
+                stops: [
+                    {}, // will use original column color
+                    { color: am5.color(0x000000) }
+                ]
+            }),
+            fillPattern: am5.GrainPattern.new(rootAgua, {
+                maxOpacity: 0.15,
+                density: 0.5,
+                colors: [am5.color(0x000000), am5.color(0x000000), am5.color(0xffffff)]
+            })
+        });
+
+        seriesAgua.columns.template.states.create("hover", {
+            shadowOpacity: 1,
+            shadowBlur: 10,
+            cornerRadiusTL: 10,
+            cornerRadiusTR: 10
+        });
+
+        seriesAgua.columns.template.adapters.add("fill", function (fill, target) {
+            return chartAgua.get("colors").getIndex(seriesAgua.columns.indexOf(target));
+        });
+
+        // Set data
+        var aguaData = {!! json_encode($cantidadAguaDiaria) !!}; // Obtener los datos del controlador
+
+        xAxisAgua.data.setAll(aguaData);
+        seriesAgua.data.setAll(aguaData);
+
+        // Make stuff animate on load
+        seriesAgua.appear(1000);
+        chartAgua.appear(1000, 100);
+    });
+</script>
+<script>
+    am5.ready(function () {
+        var rootTemperatura = am5.Root.new("chartTemperaturaDiaria");
+
+        var chartTemperatura = rootTemperatura.container.children.push(am5xy.XYChart.new(rootTemperatura, {
+            panX: true,
+            panY: true,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            pinchZoomX: true,
+            paddingLeft: 0,
+            layout: rootTemperatura.verticalLayout
+        }));
+
+        // Set colors
+        chartTemperatura.set("colors", am5.ColorSet.new(rootTemperatura, {
+            colors: [
+                am5.color(0xF6CBD1),
+                am5.color(0xF9A5AC),
+                am5.color(0xF692AE),
+                am5.color(0xF68698),
+                am5.color(0xF57C82),
+                am5.color(0xF36B7E),
+                am5.color(0xF05C7E)
+            ]
+        }));
+
+        // Create axes
+        var xRendererTemperatura = am5xy.AxisRendererX.new(rootTemperatura, {
+            minGridDistance: 50,
+            minorGridEnabled: true
+        });
+
+        xRendererTemperatura.grid.template.setAll({
+            location: 1
+        });
+
+        var xAxisTemperatura = chartTemperatura.xAxes.push(am5xy.CategoryAxis.new(rootTemperatura, {
+            maxDeviation: 0.3,
+            categoryField: "fecha",
+            renderer: xRendererTemperatura,
+            tooltip: am5.Tooltip.new(rootTemperatura, {})
+        }));
+
+        var yAxisTemperatura = chartTemperatura.yAxes.push(am5xy.ValueAxis.new(rootTemperatura, {
+            maxDeviation: 0.3,
+            min: 0,
+            renderer: am5xy.AxisRendererY.new(rootTemperatura, {
+                strokeOpacity: 0.1
+            })
+        }));
+
+        // Create series
+        var seriesTemperatura = chartTemperatura.series.push(am5xy.ColumnSeries.new(rootTemperatura, {
+            name: "Temperatura",
+            xAxis: xAxisTemperatura,
+            yAxis: yAxisTemperatura,
+            valueYField: "temperatura",
+            categoryXField: "fecha",
+            tooltip: am5.Tooltip.new(rootTemperatura, {
+                labelText: "{valueY}"
+            }),
+        }));
+
+        seriesTemperatura.columns.template.setAll({
+            tooltipY: 0,
+            tooltipText: "{categoryX}: {valueY}",
+            shadowOpacity: 0.1,
+            shadowOffsetX: 2,
+            shadowOffsetY: 2,
+            shadowBlur: 1,
+            strokeWidth: 2,
+            stroke: am5.color(0xffffff),
+            shadowColor: am5.color(0x000000),
+            cornerRadiusTL: 50,
+            cornerRadiusTR: 50,
+            fillGradient: am5.LinearGradient.new(rootTemperatura, {
+                stops: [
+                    {}, // will use original column color
+                    { color: am5.color(0x000000) }
+                ]
+            }),
+            fillPattern: am5.GrainPattern.new(rootTemperatura, {
+                maxOpacity: 0.15,
+                density: 0.5,
+                colors: [am5.color(0x000000), am5.color(0x000000), am5.color(0xffffff)]
+            })
+        });
+
+        seriesTemperatura.columns.template.states.create("hover", {
+            shadowOpacity: 1,
+            shadowBlur: 10,
+            cornerRadiusTL: 10,
+            cornerRadiusTR: 10
+        });
+
+        seriesTemperatura.columns.template.adapters.add("fill", function (fill, target) {
+            return chartTemperatura.get("colors").getIndex(seriesTemperatura.columns.indexOf(target));
+        });
+
+        // Set data
+        var temperaturaData = {!! json_encode($temperaturaDiaria) !!}; // Obtener los datos del controlador
+
+        xAxisTemperatura.data.setAll(temperaturaData);
+        seriesTemperatura.data.setAll(temperaturaData);
+
+        // Make stuff animate on load
+        seriesTemperatura.appear(1000);
+        chartTemperatura.appear(1000, 100);
+    });
+</script>
 <div class="info-box">
-    <h3>Mis estadísticas</h3>
+    <h3>ESTADÍSTICAS: CICLOS Y PERIODOS</h3>
     <p><strong>Duración media del ciclo:</strong> {{ $duracionMediaCiclo }} días</p>
     <p><strong>Duración media del periodo:</strong> {{ $duracionMediaPeriodo }} días</p>
 </div>
-<div class="chart-container">
-    <!-- Título de la primera gráfica -->
-    <h2 class="chart-title">Duración de periodos</h2>
-    <!-- Contenedor de la primera gráfica -->
-    <div id="chartdiv" class="chart"></div>
-</div>
+<div class="chart-container-wrapper">
+    <div class="chart-container">
+        <!-- Título de la primera gráfica -->
+        <h2 class="chart-title">Duración de periodos</h2>
+        <!-- Contenedor de la primera gráfica -->
+        <div id="chartdiv" class="chart"></div>
+    </div>
 
-<div class="chart-container">
-    <!-- Título de la segunda gráfica -->
-    <h2 class="chart-title">Duración de ciclos</h2>
-    <!-- Contenedor de la segunda gráfica -->
-    <div id="chartdiv2" class="chart"></div>
+    <div class="chart-container">
+        <!-- Título de la segunda gráfica -->
+        <h2 class="chart-title">Duración de ciclos</h2>
+        <!-- Contenedor de la segunda gráfica -->
+        <div id="chartdiv2" class="chart"></div>
+    </div>
+</div>
+<div class="info-box">
+    <h3>ESTADÍSTICAS: PASOS, CANTIDAD DE AGUA Y TEMPERATURA</h3>
+    <p><strong>Media semanal de pasos:</strong> {{ $mediaPasosSemanal }} pasos</p>
+    <p><strong>Media semanal de agua:</strong> {{ $mediaAguaSemanal }} litros</p>
+    <p><strong>Media semanal de temperatura:</strong> {{ $mediaTemperaturaSemanal }} ºC</p>
+</div>
+<div class="chart-container-wrapper">
+    <div class="chart-container">
+        <!-- Título de la gráfica de pasos diarios -->
+        <h2 class="chart-title">Pasos Diarios</h2>
+        <!-- Contenedor de la gráfica de pasos diarios -->
+        <div id="chartPasosDiarios" class="chart"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Cantidad de Agua Diaria</h2>
+        <div id="chartCantidadAguaDiaria" class="chart"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Temperatura Diaria</h2>
+        <div id="chartTemperaturaDiaria" class="chart"></div>
+    </div>
+</div>
+<div class="info-box">
+    <h3>ESTADÍSTICAS: ÁNIMO Y SÍNTOMAS</h3>
+
+</div>
+<div class="info-box">
+    <h3>ENTRENAMIENTO: FATIGA, MOLESTIAS Y MOTIVACIÓN</h3>
+
 </div>
