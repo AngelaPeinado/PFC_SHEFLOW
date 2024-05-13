@@ -24,6 +24,19 @@
         box-shadow: #A0404B;
     }
 
+    .chart-container-1 {
+        width: 80%;
+        margin: 20px auto; /* "auto" para que el margen izquierdo y derecho sean iguales, centrando el contenedor */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #CDB8BD;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Corregido el valor de box-shadow */
+    }
+
 
     /* Estilos para las gráficas */
     .chart {
@@ -66,7 +79,10 @@
         margin-bottom: 20px;
     }
 
-
+    .chart-container-wrapper-1 {
+        justify-content: space-between; /* Distribuye las gráficas de manera uniforme */
+        margin-bottom: 20px;
+    }
 </style>
 
 <!-- Resources -->
@@ -669,20 +685,20 @@
     <p><strong>Media semanal de agua:</strong> {{ $mediaAguaSemanal }} litros</p>
     <p><strong>Media semanal de temperatura:</strong> {{ $mediaTemperaturaSemanal }} ºC</p>
 </div>
-<div class="chart-container-wrapper">
-    <div class="chart-container">
+<div class="chart-container-wrapper-1">
+    <div class="chart-container-1">
         <!-- Título de la gráfica de pasos diarios -->
         <h2 class="chart-title">Pasos Diarios</h2>
         <!-- Contenedor de la gráfica de pasos diarios -->
         <div id="chartPasosDiarios" class="chart"></div>
     </div>
 
-    <div class="chart-container">
+    <div class="chart-container-1">
         <h2 class="chart-title">Cantidad de Agua Diaria</h2>
         <div id="chartCantidadAguaDiaria" class="chart"></div>
     </div>
 
-    <div class="chart-container">
+    <div class="chart-container-1">
         <h2 class="chart-title">Temperatura Diaria</h2>
         <div id="chartTemperaturaDiaria" class="chart"></div>
     </div>
