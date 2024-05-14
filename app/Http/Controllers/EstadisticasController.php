@@ -30,6 +30,12 @@ class EstadisticasController extends Controller
         // Obtener los estados de ánimo por mes actual
         $estadosAnimoMesActual = $this->obtenerOpcionesAnimoPorMes();
 
+        // Obtener los síntomas por mes actual
+        $sintomasMesActual = $this->obtenerOpcionesSintomasPorMes();
+
+        // Obtener los datos de fatiga, molestias y motivación de cada día del mes actual
+        $datosDiariosMesActual = $this->obtenerDatosDiariosMesActual();
+
         // Otras variables de estadísticas que ya tenías
         $datosCiclo = $this->obtenerDuracionesPeriodo();
         $duracionCiclos = $this->obtenerDuracionCiclos();
@@ -51,11 +57,12 @@ class EstadisticasController extends Controller
             'mediaAguaSemanal',
             'temperaturaDiaria',
             'mediaTemperaturaSemanal',
-            'estadosAnimoMesActual' // Agregando los estados de ánimo por mes actual
+            'estadosAnimoMesActual', // Agregando los estados de ánimo por mes actual
+            'sintomasMesActual', // Agregando los síntomas por mes actual
+            'datosDiariosMesActual' // Agregando los datos de fatiga, molestias y motivación por día del mes actual
         ));
-
-
     }
+
 
     public function obtenerDuracionesPeriodo()
     {
@@ -161,32 +168,36 @@ class EstadisticasController extends Controller
         return $duracionMedia;
     }
 
-    public function pasosDiarios($userId, $fecha)
+    public function pasosDiarios($userId)
     {
         $pasosDiarios = PivoteSintoma::where('user_id', $userId)
-            ->where('fecha', $fecha)
-            ->get(['fecha', 'pasos']); // Seleccionar solo las columnas 'fecha' y 'pasos'
+            ->select(DB::raw('DATE(created_at) AS fecha'), DB::raw('MIN(pasos) AS pasos'))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get(['fecha', 'pasos']); // Seleccionar solo la fecha y el mínimo de pasos
 
         return $pasosDiarios->toArray(); // Convertir la colección a un array
     }
 
-    public function aguaDiaria($userId, $fecha)
+    public function aguaDiaria($userId)
     {
         $aguaDiaria = PivoteSintoma::where('user_id', $userId)
-            ->where('fecha', $fecha)
-            ->get(['fecha', 'agua']); // Seleccionar solo las columnas 'fecha' y 'agua'
+            ->select(DB::raw('DATE(created_at) AS fecha'), DB::raw('MIN(agua) AS agua'))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get(['fecha', 'agua']); // Seleccionar solo la fecha y el mínimo de agua
 
         return $aguaDiaria->toArray(); // Convertir la colección a un array
     }
 
-    public function temperaturaDiaria($userId, $fecha)
+    public function temperaturaDiaria($userId)
     {
         $temperaturaDiaria = PivoteSintoma::where('user_id', $userId)
-            ->where('fecha', $fecha)
-            ->get(['fecha', 'temperatura']); // Seleccionar solo las columnas 'fecha' y 'temperatura'
+            ->select(DB::raw('DATE(created_at) AS fecha'), DB::raw('MIN(temperatura) AS temperatura'))
+            ->groupBy(DB::raw('DATE(created_at)'))
+            ->get(['fecha', 'temperatura']); // Seleccionar solo la fecha y el mínimo de temperatura
 
         return $temperaturaDiaria->toArray(); // Convertir la colección a un array
     }
+
 
 
 
@@ -307,5 +318,28 @@ class EstadisticasController extends Controller
 
         return $recuentoOpciones;
     }
+
+    public function obtenerDatosDiariosMesActual()
+    {
+        // Obtener el ID del usuario autenticado
+        $userId = Auth::id();
+
+        // Obtener el mes actual
+        $mesActual = date('m');
+
+        // Obtener los datos de fatiga, molestias y motivación para cada día del mes actual
+        $datosDiarios = DB::table('pivote_ejercicios')
+            ->select(DB::raw('MIN(created_at) as fecha'), DB::raw('MIN(fatiga) AS fatiga'), DB::raw('MIN(molestias) AS molestias'), DB::raw('MIN(motivacion) AS motivacion'))
+            ->where('user_id', $userId)
+            ->whereMonth('created_at', $mesActual)
+            ->whereNotNull('fatiga')
+            ->whereNotNull('molestias')
+            ->whereNotNull('motivacion')
+            ->groupBy('fecha')
+            ->get();
+
+        return $datosDiarios;
+    }
+
 
 }

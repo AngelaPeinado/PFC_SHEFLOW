@@ -98,6 +98,7 @@
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
 
+
 <!-- Chart code -->
 <script>
     am5.ready(function () {
@@ -687,19 +688,48 @@
 
         // Configuración de la leyenda
         var legendAnimo = chartAnimo.children.push(am5.Legend.new(rootAnimo, {
-            align: "left", // Alinea la leyenda a la izquierda
-            valign: "top", // Alinea la leyenda en la parte superior
-            layout: rootAnimo.verticalLayout, // Cambia el diseño de la leyenda a vertical
-            marginTop: 20, // Ajusta el margen superior según sea necesario
-            marginBottom: 20, // Ajusta el margen inferior según sea necesario
-            marginLeft: 20, // Ajusta el margen izquierdo según sea necesario
+            align: "left",
+            valign: "top",
+            layout: rootAnimo.verticalLayout,
+            marginTop: 20,
+            marginBottom: 20,
+            marginLeft: 20,
         }));
 
         legendAnimo.data.setAll(seriesAnimo.dataItems);
 
     });
 </script>
+<script>
+    am5.ready(function () {
+        var rootSintomas = am5.Root.new("chartdivsintomas");
+        var chartSintomas = rootSintomas.container.children.push(
+            am5percent.PieChart.new(rootSintomas, {})
+        );
+        var seriesSintomas = chartSintomas.series.push(
+            am5percent.PieSeries.new(rootSintomas, {
+                categoryField: "opcion",
+                valueField: "recuento"
+            })
+        );
 
+        // Set data from PHP
+        var dataSintomas = {!! json_encode($sintomasMesActual) !!};
+        seriesSintomas.data.setAll(dataSintomas);
+
+        // Configuración de la leyenda
+        var legendSintomas = chartSintomas.children.push(am5.Legend.new(rootSintomas, {
+            align: "left",
+            valign: "top",
+            layout: rootSintomas.verticalLayout,
+            marginTop: 20,
+            marginBottom: 20,
+            marginLeft: 20,
+        }));
+
+        legendSintomas.data.setAll(seriesSintomas.dataItems);
+    });
+</script>
 <div class="info-box">
     <h3>ESTADÍSTICAS: CICLOS Y PERIODOS</h3>
     <p><strong>Duración media del ciclo:</strong> {{ $duracionMediaCiclo }} días</p>
@@ -752,12 +782,137 @@
     <h2 class="chart-title">Estados de ánimo</h2>
     <div id="chartdivanimo"></div>
 </div>
+<div class="chart-container-1">
+    <h2 class="chart-title">Síntomas</h2>
+    <div id="chartdivsintomas"></div>
+</div>
 <div class="info-box">
     <h3>ENTRENAMIENTO: FATIGA, MOLESTIAS Y MOTIVACIÓN</h3>
 
 </div>
+<style>
+    #chartdivejercicio {
+        width: 100%;
+        height: 500px;
+    }
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+
+<<script>
+    am5.ready(function () {
+
+        // Create root element
+        var root = am5.Root.new("chartdivejercicio");
+
+        // Set themes
+        root.setThemes([
+            am5themes_Animated.new(root)
+        ]);
+
+        // Create chart
+        var chart = root.container.children.push(am5xy.XYChart.new(root, {
+            panX: false,
+            panY: false,
+            paddingLeft: 0,
+            wheelX: "panX",
+            wheelY: "zoomX",
+            layout: root.verticalLayout
+        }));
+
+        // Add legend
+        var legend = chart.children.push(
+            am5.Legend.new(root, {
+                centerX: am5.p50,
+                x: am5.p50
+            })
+        );
+
+        var dataEjercicio = {!! json_encode($datosDiariosMesActual) !!};
+        console.log(dataEjercicio);
+        // Create axes
+        var xRenderer = am5xy.AxisRendererX.new(root, {
+            cellStartLocation: 0.1,
+            cellEndLocation: 0.9,
+            minorGridEnabled: true
+        });
+
+        var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+            categoryField: "fecha",
+            renderer: xRenderer,
+            tooltip: am5.Tooltip.new(root, {})
+        }));
+
+        xRenderer.grid.template.setAll({
+            location: 0
+        });
+
+        // Formatear las fechas
+        var formattedDates = dataEjercicio.map(function(item) {
+            return { fecha: item.fecha.split(' ')[0] }; // Obtener solo la fecha sin la hora
+        });
 
 
+        xAxis.data.setAll(formattedDates);
 
+        var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererY.new(root, {
+                strokeOpacity: 0.1
+            })
+        }));
 
+        // Add series
+        function makeSeries(name, fieldName, color) {
+            var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+                name: name,
+                xAxis: xAxis,
+                yAxis: yAxis,
+                valueYField: fieldName,
+                categoryXField: "fecha",
+                fill: am5.color(color),
+            }));
 
+            series.columns.template.setAll({
+                tooltipText: "{name}, {categoryX}:{valueY}",
+                width: am5.percent(90),
+                tooltipY: 0,
+                strokeOpacity: 0
+            });
+
+            series.data.setAll(dataEjercicio);
+
+            // Make stuff animate on load
+            series.appear();
+
+            series.bullets.push(function () {
+                return am5.Bullet.new(root, {
+                    locationY: 0,
+                    sprite: am5.Label.new(root, {
+                        text: "{valueY}",
+                        fill: root.interfaceColors.get("alternativeText"),
+                        centerY: 0,
+                        centerX: am5.p50,
+                        populateText: true
+                    })
+                });
+            });
+
+            legend.data.push(series);
+        }
+
+        makeSeries("Motivación Ejercicio", "motivacion", "#f11f7c");
+        makeSeries("Fatiga Ejercicio", "fatiga", "#ffae00");
+        makeSeries("Molestias Ejercicio", "molestias", "#f5002c");
+
+        // Make stuff animate on load
+        chart.appear(1000, 100);
+
+    }); // end am5.ready()
+</script>
+<div class="chart-container-1">
+    <!-- HTML -->
+    <div id="chartdivejercicio"></div>
+</div>
