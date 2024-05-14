@@ -19,7 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
@@ -32,20 +32,20 @@
                 },
                 views: {
                     dayGridMonth: {
-                        titleFormat: { month: 'long', year: 'numeric' },
-                        dayHeaderFormat: { weekday: 'long'},
+                        titleFormat: {month: 'long', year: 'numeric'},
+                        dayHeaderFormat: {weekday: 'long'},
                         dayMaxEventRows: 3
                     },
                     timeGridWeek: {
                         slotDuration: '00:30:00',
-                        slotLabelFormat: { hour: 'numeric', minute: '2-digit', omitZeroMinute: false, meridiem: 'short' },
-                        columnHeaderFormat: { weekday: 'short' },
+                        slotLabelFormat: {hour: 'numeric', minute: '2-digit', omitZeroMinute: false, meridiem: 'short'},
+                        columnHeaderFormat: {weekday: 'short'},
                         dayMaxEventRows: 6
                     },
                     timeGridDay: {
                         slotDuration: '00:15:00',
-                        slotLabelFormat: { hour: 'numeric', minute: '2-digit', omitZeroMinute: false, meridiem: 'short' },
-                        columnHeaderFormat: { weekday: 'long', month: 'numeric', day: 'numeric' },
+                        slotLabelFormat: {hour: 'numeric', minute: '2-digit', omitZeroMinute: false, meridiem: 'short'},
+                        columnHeaderFormat: {weekday: 'long', month: 'numeric', day: 'numeric'},
                         dayMaxEventRows: 10
                     },
                 },
@@ -74,8 +74,8 @@
                 eventBackgroundColor: '#A0404B',
                 eventDisplay: 'block',
                 dayMaxEventRows: true,
-                dayPopoverFormat: { month: 'short', day: 'numeric', weekday: 'long' },
-                dateClick: function(info) {
+                dayPopoverFormat: {month: 'short', day: 'numeric', weekday: 'long'},
+                dateClick: function (info) {
                     $('#menuModal').modal('show');
                 },
             });
@@ -102,11 +102,13 @@
             <img src="SheFlowfuncion.png" class="d-block w-100" alt="...">
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="prev">
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleSlidesOnly"
+            data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly" data-bs-slide="next">
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleSlidesOnly"
+            data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
@@ -117,7 +119,9 @@
             <a class="navbar-brand" href="{{ url('/') }}">
                 <img src="{{ asset('SheFlow.png') }}" alt="Nombre de tu aplicación" style="width: 150px; height: auto;">
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
@@ -163,7 +167,8 @@
                     @else
                         <li class="nav-item dropdown">
                             <div class="nav-link-wrapper">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                                   data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
                                 </a>
 
@@ -186,27 +191,49 @@
         </div>
     </nav>
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div id='calendar'></div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <div class="custom-container">
                 <div class="text-center mb-4">
-                    <img src="SheFlowDeletee.png" class="img-fluid mb-3" alt="Eliminar" style="max-width: 50px;" title="Arrastra evento para eliminar">
+                    <img src="SheFlowDeletee.png" class="img-fluid mb-3" alt="Eliminar" style="max-width: 40px;"
+                         title="Arrastra evento para eliminar">
                 </div>
                 <div class="text-center">
-                    <img src="SheFlowEdit.png" class="img-fluid" alt="Editar" style="max-width: 50px;" title="Arrastra periodo para editar">
+                    <img src="SheFlowEdit.png" class="img-fluid" alt="Editar" style="max-width: 40px;"
+                         title="Arrastra periodo para editar">
                 </div>
                 <br>
                 <hr>
                 <br>
                 <div class="text-center">
-                    <img src="SheFlowRegistroIcon.png" class="img-fluid mb-3" alt="Eliminar" style="max-width: 50px;" title="Registrar Evento/Período">
+                    <a href="{{ route('estadisticas') }}">
+                        <img src="SheFlowRegistroIcon.png" class="img-fluid mb-3" alt="estadistica"
+                             style="max-width: 40px;"
+                             title="Ver estadísticas">
+                    </a>
                 </div>
                 <div class="text-center">
-                    <img src="SheFlowRegistroIconn.png" class="img-fluid" alt="Editar" style="max-width: 50px;" title="Editar Registro">
+                    <a href="{{ route('inflex') }}">
+                        <img src="SheFlowRegistroIconn.png" class="img-fluid" alt="ir al registro"
+                             style="max-width: 40px;"
+                             title="Registro diario">
+                    </a>
                 </div>
             </div>
+            <br>
+
+            <div class="custom-container-2">
+                @if ($opcionAnimoRandom)
+                    <div class="text-center">
+                        <img src="{{ $opcionAnimoRandom['foto'] }}" class="img-fluid" alt="Imagen aleatoria"
+                             style="max-width: 50px;">
+                        <p>{{ $opcionAnimoRandom['frase'] }}</p>
+                    </div>
+                @endif
+            </div>
+
         </div>
     </div>
 
@@ -216,10 +243,12 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addEventModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addEventModal">
                         <strong>AGREGAR EVENTO</strong>
                     </button>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addPeriodModal">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#addPeriodModal">
                         <strong>REGISTRAR PERIODO</strong>
                     </button>
                 </div>
@@ -240,19 +269,23 @@
                         @csrf
                         <div class="mb-3">
                             <label for="Evento" class="form-label form-label-event">Evento</label>
-                            <input type="text" class="form-control form-control-event" id="Evento" name="Evento" required>
+                            <input type="text" class="form-control form-control-event" id="Evento" name="Evento"
+                                   required>
                         </div>
                         <div class="mb-3">
                             <label for="Descripcion" class="form-label form-label-event">Descripción</label>
-                            <textarea class="form-control form-control-event" id="Descripcion" name="Descripcion" required></textarea>
+                            <textarea class="form-control form-control-event" id="Descripcion" name="Descripcion"
+                                      required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="start_date" class="form-label form-label-event">Fecha de Inicio</label>
-                            <input type="datetime-local" class="form-control form-control-event" id="start_date" name="start_date" required>
+                            <input type="datetime-local" class="form-control form-control-event" id="start_date"
+                                   name="start_date" required>
                         </div>
                         <div class="mb-3">
                             <label for="end_date" class="form-label form-label-event">Fecha de Fin</label>
-                            <input type="datetime-local" class="form-control form-control-event" id="end_date" name="end_date" required>
+                            <input type="datetime-local" class="form-control form-control-event" id="end_date"
+                                   name="end_date" required>
                         </div>
                         <button type="submit" class="btn btn-save-event">Guardar Evento</button>
                     </form>
@@ -274,11 +307,13 @@
                         @csrf
                         <div class="mb-3">
                             <label for="fechaPeriodo_inicio" class="form-label form-label-event">Fecha de Inicio</label>
-                            <input type="date" class="form-control form-control-event" id="fechaPeriodo_inicio" name="fechaPeriodo_inicio" required>
+                            <input type="date" class="form-control form-control-event" id="fechaPeriodo_inicio"
+                                   name="fechaPeriodo_inicio" required>
                         </div>
                         <div class="mb-3">
                             <label for="fechaPeriodo_fin" class="form-label form-label-event">Fecha de Fin</label>
-                            <input type="date" class="form-control form-control-event" id="fechaPeriodo_fin" name="fechaPeriodo_fin" required>
+                            <input type="date" class="form-control form-control-event" id="fechaPeriodo_fin"
+                                   name="fechaPeriodo_fin" required>
                         </div>
                         <button type="submit" class="btn btn-save-event">Guardar</button>
                     </form>
@@ -303,31 +338,12 @@
                     </div>
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="ANTICONCEPTIVOS.png" class="d-block w-100" alt="...">
+                            <img src="ANTICONCEPTIVOS.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="LIBROS.png" class="d-block w-100" alt="...">
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="row">
-                    <div class="col-md-4">
-                        <a href="url_de_tu_pagina1">
-                        <img src="CICLOREDIMIENTO.png" class="d-block w-100" alt="...">
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="url_de_tu_pagina1">
-                        <img src="EJERCICIOMENSTRUACION.png" class="d-block w-100" alt="...">
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="url_de_tu_pagina1">
-                        <img src="SUELOPELVICO.png" class="d-block w-100" alt="...">
+                            <img src="LIBROS.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                 </div>
@@ -336,17 +352,17 @@
                 <div class="row">
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="AMENORREA.png" class="d-block w-100" alt="...">
+                            <img src="CICLOREDIMIENTO.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="DESEQUILIBRIO.png" class="d-block w-100" alt="...">
+                            <img src="EJERCICIOMENSTRUACION.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="PISCINA.png" class="d-block w-100" alt="...">
+                            <img src="SUELOPELVICO.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                 </div>
@@ -355,17 +371,36 @@
                 <div class="row">
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="ESTRES.png" class="d-block w-100" alt="...">
+                            <img src="AMENORREA.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="COPA .png" class="d-block w-100" alt="...">
+                            <img src="DESEQUILIBRIO.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                     <div class="col-md-4">
                         <a href="url_de_tu_pagina1">
-                        <img src="FREEB.png" class="d-block w-100" alt="...">
+                            <img src="PISCINA.png" class="d-block w-100" alt="...">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="row">
+                    <div class="col-md-4">
+                        <a href="url_de_tu_pagina1">
+                            <img src="ESTRES.png" class="d-block w-100" alt="...">
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="url_de_tu_pagina1">
+                            <img src="COPA .png" class="d-block w-100" alt="...">
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="url_de_tu_pagina1">
+                            <img src="FREEB.png" class="d-block w-100" alt="...">
                         </a>
                     </div>
                 </div>

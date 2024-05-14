@@ -163,7 +163,7 @@ p {
     margin-top: 70px;
     border-radius: 10px; /* Bordes redondeados */
     padding: 20px; /* Espacio interno */
-    border: 15px solid #9d3e49; /* Bordes anchos con color */
+    border: 5px solid #9d3e49; /* Bordes anchos con color */
     /* Otros estilos según tus preferencias */
 }
 .row {
@@ -171,6 +171,18 @@ p {
     margin-right: 150px;
 }
 
+.custom-container-2 {
+    max-width: 900px; /* Ancho máximo del contenedor */
+    margin: 0 auto; /* Centrar horizontalmente */
+    padding: 20px; /* Espaciado interior */
+    border: 3px solid #9d3e49; /* Bordes anchos con color */
+    border-radius: 10px; /* Borde redondeado */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.custom-container-2 p {
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+}
 
 .navbar {
     background-color: #A0404B; /* Rosa */

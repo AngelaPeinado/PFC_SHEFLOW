@@ -21,6 +21,11 @@ class FormController extends Controller
         // Verificar si existe un formulario asociado al usuario
         $formularioExistente = Cuestionario::where('user_id', $userId)->exists();
 
+        $calendarController = new CalendarController();
+
+        // Obtener la opción de ánimo aleatoria
+        $opcionAnimoRandom = $calendarController->obtenerOpcionAnimoUsuarioHoy();
+
         // Redirigir al usuario según el formulario existente
         if ($formularioExistente) {
             // Obtener el ID del usuario autenticado
@@ -32,7 +37,7 @@ class FormController extends Controller
             // Obtener las fechas de período del usuario autenticado
             $fechasPeriodo = FechaPeriodo::where('user_id', $userId)->get();
 
-            return view('calendar', compact('eventos', 'fechasPeriodo'));
+            return view('calendar', compact('eventos', 'fechasPeriodo', 'opcionAnimoRandom'));
         } else {
             return view('form'); // Redirigir a la página 'form'
         }

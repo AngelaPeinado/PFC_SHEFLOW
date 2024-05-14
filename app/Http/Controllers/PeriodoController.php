@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Evento;
@@ -16,8 +15,12 @@ class PeriodoController extends Controller
      */
     public function index()
     {
+
+        $calendarController = new CalendarController();
+        $opcionAnimoRandom = $calendarController->obtenerOpcionAnimoUsuarioHoy();
+
         // Obtener el ID del usuario autenticado
-        $userId = auth()->id();
+        $userId = Auth::id();
 
         // Obtener los eventos del usuario autenticado
         $eventos = Evento::where('user_id', $userId)->get();
@@ -25,8 +28,9 @@ class PeriodoController extends Controller
         // Obtener las fechas de período del usuario autenticado
         $fechasPeriodo = FechaPeriodo::where('user_id', $userId)->get();
 
-        return view('calendar', compact('eventos', 'fechasPeriodo'));
+        return view('calendar', compact('eventos', 'fechasPeriodo', 'opcionAnimoRandom'));
     }
+
     /**
      * Guarda una nueva fecha de periodo en la base de datos.
      *
@@ -50,15 +54,9 @@ class PeriodoController extends Controller
 
         // Guarda la fecha en la base de datos
         $fechaPeriodo->save();
-        // Obtener el ID del usuario autenticado
-        $userId = auth()->id();
 
-        // Obtener los eventos del usuario autenticado
-        $eventos = Evento::where('user_id', $userId)->get();
-
-        // Obtener las fechas de período del usuario autenticado
-        $fechasPeriodo = FechaPeriodo::where('user_id', $userId)->get();
-
-        return view('calendar', compact('eventos', 'fechasPeriodo'));
+        // Después de guardar, redirecciona al usuario a la vista 'calendar' utilizando el método 'index()'
+        return $this->index();
     }
 }
+
