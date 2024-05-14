@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 class EstadisticasController extends Controller
 {
-// Dentro de tu controlador...
     public function index()
     {
         // Obtener el ID del usuario autenticado
@@ -22,21 +21,11 @@ class EstadisticasController extends Controller
         // Obtener el mes actual
         $mesActual = date('m');
 
-        // Obtener los datos de pasos, agua y temperatura
-        $pasosDiarios = $this->pasosDiarios($userId, $fechaActual);
-        $cantidadAguaDiaria = $this->aguaDiaria($userId, $fechaActual);
-        $temperaturaDiaria = $this->temperaturaDiaria($userId, $fechaActual);
-
-        // Obtener los estados de ánimo por mes actual
+        $datosEjercicio = $this->obtenerDatosEjercicio($userId);
         $estadosAnimoMesActual = $this->obtenerOpcionesAnimoPorMes();
-
-        // Obtener los síntomas por mes actual
         $sintomasMesActual = $this->obtenerOpcionesSintomasPorMes();
-
-        // Obtener los datos de fatiga, molestias y motivación de cada día del mes actual
-        $datosDiariosMesActual = $this->obtenerDatosDiariosMesActual();
-
-        // Otras variables de estadísticas que ya tenías
+        $datosDiarios = $this->obtenerDatosDiarios($userId);
+        $pasosDiarios = $this->obtenerPDiarios($userId);
         $datosCiclo = $this->obtenerDuracionesPeriodo();
         $duracionCiclos = $this->obtenerDuracionCiclos();
         $duracionMediaCiclo = $this->calcularDuracionMediaCicloMenstrual();
@@ -44,22 +33,21 @@ class EstadisticasController extends Controller
         $mediaPasosSemanal = $this->mediaPasosSemanal($userId);
         $mediaAguaSemanal = $this->mediaAguaSemanal($userId);
         $mediaTemperaturaSemanal = $this->mediaTemperaturaSemanal($userId);
-
+        //dd($datosDiarios, $datosDiariosEjercicio);
         // Pasar todos los datos a la vista
         return view('statistics', compact(
             'duracionCiclos',
             'datosCiclo',
             'duracionMediaCiclo',
             'duracionMediaPeriodo',
-            'pasosDiarios',
             'mediaPasosSemanal',
-            'cantidadAguaDiaria',
             'mediaAguaSemanal',
-            'temperaturaDiaria',
             'mediaTemperaturaSemanal',
-            'estadosAnimoMesActual', // Agregando los estados de ánimo por mes actual
-            'sintomasMesActual', // Agregando los síntomas por mes actual
-            'datosDiariosMesActual' // Agregando los datos de fatiga, molestias y motivación por día del mes actual
+            'estadosAnimoMesActual',
+            'sintomasMesActual',
+            'datosDiarios',
+            'pasosDiarios',
+            'datosEjercicio'
         ));
     }
 
@@ -132,6 +120,7 @@ class EstadisticasController extends Controller
 
         return $duracionCiclos; // Devolver las duraciones de los ciclos
     }
+
     public function calcularDuracionMediaCicloMenstrual()
     {
         // Obtener las duraciones de los ciclos
@@ -168,39 +157,32 @@ class EstadisticasController extends Controller
         return $duracionMedia;
     }
 
-    public function pasosDiarios($userId)
+    public function obtenerDatosDiarios($userId)
     {
-        $pasosDiarios = PivoteSintoma::where('user_id', $userId)
-            ->select(DB::raw('DATE(created_at) AS fecha'), DB::raw('MIN(pasos) AS pasos'))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->get(['fecha', 'pasos']); // Seleccionar solo la fecha y el mínimo de pasos
+        $datosDiarios = PivoteSintoma::select(
+            DB::raw('DATE(ANY_VALUE(created_at)) AS fecha'),
+            DB::raw('MIN(agua) AS agua'),
+            DB::raw('MIN(temperatura) AS temperatura')
+        )
+            ->where('user_id', $userId)
+            ->groupBy('fecha')
+            ->get();
 
-        return $pasosDiarios->toArray(); // Convertir la colección a un array
+        return $datosDiarios->toArray();
     }
 
-    public function aguaDiaria($userId)
+    public function obtenerPDiarios($userId)
     {
-        $aguaDiaria = PivoteSintoma::where('user_id', $userId)
-            ->select(DB::raw('DATE(created_at) AS fecha'), DB::raw('MIN(agua) AS agua'))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->get(['fecha', 'agua']); // Seleccionar solo la fecha y el mínimo de agua
+        $datosDiarios = PivoteSintoma::select(
+            DB::raw('DATE(ANY_VALUE(created_at)) AS fecha'),
+            DB::raw('MIN(pasos) AS pasos'),
+        )
+            ->where('user_id', $userId)
+            ->groupBy('fecha')
+            ->get();
 
-        return $aguaDiaria->toArray(); // Convertir la colección a un array
+        return $datosDiarios->toArray();
     }
-
-    public function temperaturaDiaria($userId)
-    {
-        $temperaturaDiaria = PivoteSintoma::where('user_id', $userId)
-            ->select(DB::raw('DATE(created_at) AS fecha'), DB::raw('MIN(temperatura) AS temperatura'))
-            ->groupBy(DB::raw('DATE(created_at)'))
-            ->get(['fecha', 'temperatura']); // Seleccionar solo la fecha y el mínimo de temperatura
-
-        return $temperaturaDiaria->toArray(); // Convertir la colección a un array
-    }
-
-
-
-
     public function mediaPasosSemanal($userId)
     {
         $fechaActual = Carbon::now();
@@ -211,7 +193,7 @@ class EstadisticasController extends Controller
             ->whereBetween('fecha', [$inicioSemana, $finSemana])
             ->avg('pasos');
 
-        return  $mediaPasosSemanal;
+        return $mediaPasosSemanal;
 
     }
 
@@ -318,17 +300,14 @@ class EstadisticasController extends Controller
 
         return $recuentoOpciones;
     }
-
-    public function obtenerDatosDiariosMesActual()
+    public function obtenerDatosEjercicio($userId)
     {
-        // Obtener el ID del usuario autenticado
-        $userId = Auth::id();
 
         // Obtener el mes actual
         $mesActual = date('m');
 
         // Obtener los datos de fatiga, molestias y motivación para cada día del mes actual
-        $datosDiarios = DB::table('pivote_ejercicios')
+        $estadisticasEjercicio = DB::table('pivote_ejercicios')
             ->select(DB::raw('MIN(created_at) as fecha'), DB::raw('MIN(fatiga) AS fatiga'), DB::raw('MIN(molestias) AS molestias'), DB::raw('MIN(motivacion) AS motivacion'))
             ->where('user_id', $userId)
             ->whereMonth('created_at', $mesActual)
@@ -336,10 +315,12 @@ class EstadisticasController extends Controller
             ->whereNotNull('molestias')
             ->whereNotNull('motivacion')
             ->groupBy('fecha')
-            ->get();
+            ->get()
+            ->toArray(); // Convertir la colección a un array de PHP
 
-        return $datosDiarios;
+        return $estadisticasEjercicio;
     }
+
 
 
 }
