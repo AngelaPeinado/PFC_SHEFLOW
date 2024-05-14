@@ -36,4 +36,36 @@ class EventoController extends Controller
 
         return redirect()->route('calendar.index')->with('success', 'Evento agregado exitosamente.');
     }
+
+    // Dentro de tu controlador EventoController.php
+
+    public function update(Request $request, $id)
+    {
+        $evento = Evento::findOrFail($id);
+
+        $request->validate([
+            'Evento' => 'required|string',
+            'Descripcion' => 'required|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        $evento->update([
+            'Evento' => $request->Evento,
+            'Descripcion' => $request->Descripcion,
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+        ]);
+
+        return redirect()->route('calendar.index')->with('success', 'Evento actualizado exitosamente.');
+    }
+
+    public function destroy($id)
+    {
+        $evento = Evento::findOrFail($id);
+        $evento->delete();
+
+        return redirect()->route('calendar.index')->with('success', 'Evento eliminado exitosamente.');
+    }
+
 }

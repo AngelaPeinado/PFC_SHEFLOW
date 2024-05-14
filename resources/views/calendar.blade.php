@@ -185,7 +185,32 @@
             </div>
         </div>
     </nav>
-    <div id='calendar'></div>
+    <div class="row">
+        <div class="col-md-10">
+            <div id='calendar'></div>
+        </div>
+        <div class="col-md-2">
+            <div class="custom-container">
+                <div class="text-center mb-4">
+                    <img src="SheFlowDeletee.png" class="img-fluid mb-3" alt="Eliminar" style="max-width: 50px;" title="Arrastra evento para eliminar">
+                </div>
+                <div class="text-center">
+                    <img src="SheFlowEdit.png" class="img-fluid" alt="Editar" style="max-width: 50px;" title="Arrastra periodo para editar">
+                </div>
+                <br>
+                <hr>
+                <br>
+                <div class="text-center">
+                    <img src="SheFlowRegistroIcon.png" class="img-fluid mb-3" alt="Eliminar" style="max-width: 50px;" title="Registrar Evento/Período">
+                </div>
+                <div class="text-center">
+                    <img src="SheFlowRegistroIconn.png" class="img-fluid" alt="Editar" style="max-width: 50px;" title="Editar Registro">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!----------------------MODALES-------------------------->
     <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalLabel" aria-hidden="true">
         <div class="modal-dialog">

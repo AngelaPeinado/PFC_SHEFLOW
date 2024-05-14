@@ -96,8 +96,8 @@
 
 
 #calendar{
-    max-width: 900px;
-    margin: 40px auto;
+    max-width: 950px;
+    margin: 20px ;
 }
 .articulos-recientes {
     text-align: center;
@@ -158,6 +158,19 @@ p {
     filter: brightness(70%);
     transition: filter 0.3s ease;
 }
+
+.custom-container {
+    margin-top: 70px;
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 20px; /* Espacio interno */
+    border: 15px solid #9d3e49; /* Bordes anchos con color */
+    /* Otros estilos según tus preferencias */
+}
+.row {
+    margin-left: 150px;
+    margin-right: 150px;
+}
+
 
 .navbar {
     background-color: #A0404B; /* Rosa */
