@@ -54,7 +54,7 @@ class EstadisticasController extends Controller
             'estadosAnimoMesActual' // Agregando los estados de ánimo por mes actual
         ));
 
-        dd(estadosAnimoMesActual);
+
     }
 
     public function obtenerDuracionesPeriodo()
@@ -247,18 +247,7 @@ class EstadisticasController extends Controller
         // Inicializar el array para almacenar el recuento de cada opción
         $recuentoOpciones = [];
 
-        // Calcular el recuento total de todos los síntomas de ánimo para el mes actual
-        $recuentoTotal = DB::table('pivote_sintomas')
-            ->whereIn('opcion_sintoma_id', function ($query) use ($opcionesAnimo) {
-                $query->select('id')
-                    ->from('sintomas')
-                    ->whereIn('opcion_sintoma', $opcionesAnimo)
-                    ->where('tipo_sintoma', 'Ánimo');
-            })
-            ->whereMonth('fecha', '=', $mesActual)
-            ->count();
-
-        // Recorrer cada opción y calcular su porcentaje con respecto al total
+        // Recorrer cada opción y obtener el recuento para el mes actual del usuario
         foreach ($opcionesAnimo as $opcion) {
             $recuento = DB::table('pivote_sintomas')
                 ->where('opcion_sintoma_id', function ($query) use ($opcion) {
@@ -270,18 +259,53 @@ class EstadisticasController extends Controller
                 ->whereMonth('fecha', '=', $mesActual)
                 ->count();
 
-            // Calcular el porcentaje y manejar el caso cuando el recuento sea 0
-            $porcentaje = $recuentoTotal != 0 ? ($recuento / $recuentoTotal) * 100 : 0;
+            // Almacenar la opción y el recuento en el array asociativo
             $recuentoOpciones[] = [
                 'opcion' => $opcion,
-                'porcentaje' => $porcentaje
+                'recuento' => $recuento
             ];
-            //dd($recuento, $recuentoTotal, $porcentaje);
         }
 
         return $recuentoOpciones;
     }
 
 
+    public function obtenerOpcionesSintomasPorMes()
+    {
+        // Obtener el mes actual del usuario
+        $mesActual = date('m');
+
+        // Obtener las opciones del tipo de síntoma "Síntomas"
+        $opcionesSintomas = DB::table('sintomas')
+            ->select('opcion_sintoma')
+            ->where('tipo_sintoma', 'Síntomas')
+            ->get()
+            ->pluck('opcion_sintoma')
+            ->toArray();
+
+        // Inicializar el array para almacenar el recuento de cada opción
+        $recuentoOpciones = [];
+
+        // Recorrer cada opción y obtener el recuento para el mes actual del usuario
+        foreach ($opcionesSintomas as $opcion) {
+            $recuento = DB::table('pivote_sintomas')
+                ->where('opcion_sintoma_id', function ($query) use ($opcion) {
+                    $query->select('id')
+                        ->from('sintomas')
+                        ->where('opcion_sintoma', $opcion)
+                        ->where('tipo_sintoma', 'Síntomas');
+                })
+                ->whereMonth('fecha', '=', $mesActual)
+                ->count();
+
+            // Almacenar la opción y el recuento en el array asociativo
+            $recuentoOpciones[] = [
+                'opcion' => $opcion,
+                'recuento' => $recuento
+            ];
+        }
+
+        return $recuentoOpciones;
+    }
 
 }

@@ -95,6 +95,8 @@
 <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
 
 <!-- Chart code -->
 <script>
@@ -674,26 +676,23 @@
         );
         var seriesAnimo = chartAnimo.series.push(
             am5percent.PieSeries.new(rootAnimo, {
-                categoryField: "opcionAnimo",
-                valueField: "recuentoAnimo"
+                categoryField: "opcion",
+                valueField: "recuento"
             })
         );
 
         // Set data from PHP
         var dataAnimo = {!! json_encode($estadosAnimoMesActual) !!};
+        seriesAnimo.data.setAll(dataAnimo);
 
-        // Convertir el formato de los datos si es necesario
-        var formattedDataAnimo = dataAnimo.map(function(item) {
-            return { opcionAnimo: item.opcion, recuentoAnimo: parseInt(item.recuento) };
-        });
-
-        seriesAnimo.data.setAll(formattedDataAnimo);
-
-        // Asegurarnos de que la leyenda tenga datos correctos
+        // Configuración de la leyenda
         var legendAnimo = chartAnimo.children.push(am5.Legend.new(rootAnimo, {
-            centerX: am5.percent(50),
-            x: am5.percent(50),
-            layout: rootAnimo.horizontalLayout
+            align: "left", // Alinea la leyenda a la izquierda
+            valign: "top", // Alinea la leyenda en la parte superior
+            layout: rootAnimo.verticalLayout, // Cambia el diseño de la leyenda a vertical
+            marginTop: 20, // Ajusta el margen superior según sea necesario
+            marginBottom: 20, // Ajusta el margen inferior según sea necesario
+            marginLeft: 20, // Ajusta el margen izquierdo según sea necesario
         }));
 
         legendAnimo.data.setAll(seriesAnimo.dataItems);
@@ -757,3 +756,8 @@
     <h3>ENTRENAMIENTO: FATIGA, MOLESTIAS Y MOTIVACIÓN</h3>
 
 </div>
+
+
+
+
+
