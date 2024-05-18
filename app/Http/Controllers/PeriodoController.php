@@ -55,8 +55,9 @@ class PeriodoController extends Controller
         // Guarda la fecha en la base de datos
         $fechaPeriodo->save();
 
-        // Después de guardar, redirecciona al usuario a la vista 'calendar' utilizando el método 'index()'
-        return $this->index();
+        // Después de guardar, redirige al usuario a la vista 'calendar'
+        return redirect()->route('calendar.index')->with('success', 'Fecha de período guardada exitosamente.');
     }
+
 }
 

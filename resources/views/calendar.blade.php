@@ -17,6 +17,9 @@
     @vite(['resources/sass/calendar.scss', 'resources/js/app.js'])
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.11/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.11/index.global.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.11/index.global.min.js'></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -25,6 +28,9 @@
                 initialView: 'dayGridMonth',
                 locale: "es",
                 themeSystem: 'bootstrap',
+                editable: true,
+                droppable: true,
+                eventResizableFromStart: true,
                 headerToolbar: {
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay',
@@ -53,11 +59,12 @@
                         @if($eventos->isNotEmpty())
                         @foreach($eventos as $evento)
                     {
-                        Evento: '{{ $evento->Evento }}',
+                        title: '{{ $evento->Evento }}',
                         start: '{{ $evento->start_date }}',
                         end: '{{ $evento->end_date }}',
-                        color: '#e52d3d', // Color del evento
-                        description: '{{ $evento->Descripcion }}'
+                        color: '#e52d3d',
+                        description: '{{ $evento->Descripcion }}',
+                        id: '{{ $evento->id }}',
                     },
                         @endforeach
                         @endif
@@ -66,7 +73,7 @@
                         title: 'Período',
                         start: '{{ $fechaPeriodo->fechaPeriodo_inicio }}',
                         end: '{{ $fechaPeriodo->fechaPeriodo_fin }}',
-                        color: '#9a001b', // Color del período
+                        color: '#9a001b',
                         description: 'Período'
                     },
                     @endforeach
@@ -78,10 +85,80 @@
                 dateClick: function (info) {
                     $('#menuModal').modal('show');
                 },
+                eventDrop: function (info) {
+                    updateEvent(info.event);
+                },
+                eventResize: function (info) {
+                    updateEvent(info.event);
+                    console.log(info.event);
+                },
+                eventDragStop: function (info) {
+                    var deleteEl = document.getElementById('deleteEvent');
+                    var deleteElRect = deleteEl.getBoundingClientRect();
+                    var x = info.jsEvent.clientX;
+                    var y = info.jsEvent.clientY;
+
+                    console.log('Event Drag Stop', x, y);
+                    console.log('Delete Element Position', deleteElRect);
+
+                    if (x >= deleteElRect.left && x <= deleteElRect.right && y >= deleteElRect.top && y <= deleteElRect.bottom) {
+                        console.log('Event inside delete area');
+                        calendar.getEventById(info.event.id).remove();
+                        deleteEvent(info.event.id);
+                    } else {
+                        console.log('Event outside delete area');
+                    }
+                }
             });
             calendar.render();
+
+            function updateEvent(event) {
+                // Formatea las fechas a 'Y-m-d H:i:s'
+                const formatDate = (date) => {
+                    if (!date) return null;
+                    const d = new Date(date);
+                    return `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}:${('0' + d.getSeconds()).slice(-2)}`;
+                };
+
+                $.ajax({
+                    url: '/events/' + event.id,
+                    type: 'PUT',
+                    data: {
+                        _token: '{{ csrf_token() }}',
+                        Evento: event.title,
+                        Descripcion: event.extendedProps.description,
+                        start_date: formatDate(event.start),
+                        end_date: formatDate(event.end),
+                    },
+                    success: function (response) {
+                        console.log('Evento actualizado', response);
+                    },
+                    error: function (error) {
+                        console.error('Error al actualizar el evento', error);
+                        console.error('Error details:', error.responseText);
+                    }
+                });
+            }
+
+            function deleteEvent(eventId) {
+                console.log('Deleting event with ID:', eventId); // Agrega este registro de depuración
+                $.ajax({
+                    url: '/events/' + eventId,
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        console.log('Evento eliminado', response);
+                    },
+                    error: function (error) {
+                        console.error('Error al eliminar el evento', error);
+                    }
+                });
+            }
         });
     </script>
+
 </head>
 <body>
 <div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
@@ -197,23 +274,18 @@
         <div class="col-md-3">
             <div class="custom-container">
                 <div class="text-center mb-4">
-                    <img src="SheFlowDeletee.png" class="img-fluid mb-3" alt="Eliminar" style="max-width: 40px;"
-                         title="Arrastra evento para eliminar">
+                    <img src="SheFlowDeletee.png" id="deleteEvent" class="img-fluid mb-3" alt="Eliminar" style="max-width: 40px;" title="Arrastra evento para eliminar">
                 </div>
-                <div class="text-center">
-                    <img src="SheFlowEdit.png" class="img-fluid" alt="Editar" style="max-width: 40px;"
-                         title="Arrastra periodo para editar">
-                </div>
-                <br>
                 <hr>
                 <br>
                 <div class="text-center">
                     <a href="{{ route('estadisticas') }}">
-                        <img src="SheFlowRegistroIcon.png" class="img-fluid mb-3" alt="estadistica"
+                        <img src="SheFlowRegistroIcon.png" id="deleteEvent" class="img-fluid mb-3" alt="estadistica"
                              style="max-width: 40px;"
                              title="Ver estadísticas">
                     </a>
                 </div>
+                <br>
                 <div class="text-center">
                     <a href="{{ route('inflex') }}">
                         <img src="SheFlowRegistroIconn.png" class="img-fluid" alt="ir al registro"
@@ -228,7 +300,9 @@
                 @if ($opcionAnimoRandom)
                     <div class="text-center">
                         <img src="{{ $opcionAnimoRandom['foto'] }}" class="img-fluid" alt="Imagen aleatoria"
-                             style="max-width: 50px;">
+                             style="max-width: 105px;">
+                        <br>
+                        <br>
                         <p>{{ $opcionAnimoRandom['frase'] }}</p>
                     </div>
                 @endif

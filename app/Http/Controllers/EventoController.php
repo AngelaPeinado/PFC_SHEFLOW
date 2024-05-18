@@ -41,31 +41,37 @@ class EventoController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Buscar el evento por ID
         $evento = Evento::findOrFail($id);
 
+        // Validar los datos entrantes
         $request->validate([
             'Evento' => 'required|string',
             'Descripcion' => 'required|string',
             'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
+        // Actualizar el evento
         $evento->update([
-            'Evento' => $request->Evento,
-            'Descripcion' => $request->Descripcion,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
+            'Evento' => $request->input('Evento'),
+            'Descripcion' => $request->input('Descripcion'),
+            'start_date' => $request->input('start_date'),
+            'end_date' => $request->input('end_date'),
         ]);
 
-        return redirect()->route('calendar.index')->with('success', 'Evento actualizado exitosamente.');
+        // Retornar una respuesta exitosa
+        return response()->json(['success' => 'Evento actualizado exitosamente.']);
     }
+
 
     public function destroy($id)
     {
         $evento = Evento::findOrFail($id);
         $evento->delete();
 
-        return redirect()->route('calendar.index')->with('success', 'Evento eliminado exitosamente.');
+        // Devuelve una respuesta JSON indicando que el evento se ha eliminado
+        return response()->json(['success' => true]);
     }
 
 }

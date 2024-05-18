@@ -101,7 +101,13 @@
             </div>
 
             <hr>
-            <input type="submit" value="Enviar" class="btn btn-primary btn-lg btn-block mt-4">
+            <button type="submit" class="cta" id="guardarBtn"> <!-- Botón para iniciar el cuestionario -->
+                <span>{{ __('Enviar') }}</span>
+                <svg width="13px" height="10px" viewBox="0 0 13 10">
+                    <path d="M1,5 L11,5"></path>
+                    <polyline points="8 1 12 5 8 9"></polyline>
+                </svg>
+            </button>
         </form>
     </div>
 @endsection

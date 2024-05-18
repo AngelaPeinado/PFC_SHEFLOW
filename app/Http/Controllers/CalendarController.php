@@ -36,12 +36,12 @@ class CalendarController extends Controller
             'cansada' => ['foto' => 'SheFlowWomanEatGood.png', 'frase' => '¿Estás cansada? ¡Descansa y no te olvides de comer bien!'],
             'vacia' => ['foto' => 'SheFlowWomenNotAlone.png', 'frase' => 'Si te sientes vacía...habla con tu mejor amiga/o y te sentirás mucho mejor'],
             'preocupada' => ['foto' => 'SheFlowWomanMeditate.png', 'frase' => 'Respira y medita. ¿Por qué estas preocupada? ¿Cómo lo puedo solucionar o mejorar?'],
-            'activa' => ['foto' => 'SheFlowSportGood.png', 'frase' => '¡Hoy es un buen día para hacer deporte!'],
+            'activa' => ['foto' => 'SheFlowWomanSportGood.png', 'frase' => '¡Hoy es un buen día para hacer deporte!'],
             'confundida' => ['foto' => 'SheFlowWomenShopping.png', 'frase' => '¿Estás confundida? ¡Haz planes con tus amigas/os!'],
             'apatica' => ['foto' => 'SheFlowWomenNeedToRest.png', 'frase' => 'Darse un respiro también es importante'],
             'calmada' => ['foto' => 'SheFlowWomenCalmada.png', 'frase' => '¡Disfruta de tu día!'],
             'frustrada' => ['foto' => 'SheFlowWomenFrustrada.png', 'frase' => 'Si estas frustrada...¡Distraete con tus hobbies!'],
-            'enfadada' => ['foto' => 'SheFlowWomenAngry.png', 'frase' => '¿Estás enfadada? ¡Grita! !Desahogate! '],
+            'enfadada' => ['foto' => 'SheFlowWomenAngry.png', 'frase' => '¿Estás enfadada? ¡Grita! !Desahógate! '],
             // Agrega más opciones según necesites
         ];
 

@@ -41,6 +41,8 @@ Route::post('/event', [App\Http\Controllers\EventoController::class, 'index'])->
 
 Route::post('/event', [App\Http\Controllers\EventoController::class, 'store'])->name('events.store');
 
+Route::post('/destroy', [App\Http\Controllers\EventoController::class, 'destroy'])->name('events.destroy');
+
 Route::post('/period', [App\Http\Controllers\PeriodoController::class, 'index'])->name('period.index');
 
 use App\Http\Controllers\PeriodoController;
@@ -66,3 +68,5 @@ Route::post('/store-ejercicios', [RegistroDiarioController::class, 'storeEjercic
 Route::get('/registro-diario-hecho', [RegistroDiarioController::class, 'registroDiarioHecho'])->name('RegistroDiarioHecho');
 
 
+Route::put('/events/{id}', [App\Http\Controllers\EventoController::class, 'update'])->name('events.update');
+Route::delete('/events/{id}', [App\Http\Controllers\EventoController::class, 'destroy'])->name('events.destroy');
