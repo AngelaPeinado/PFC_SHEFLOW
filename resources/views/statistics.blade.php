@@ -486,8 +486,8 @@
             legend.data.push(series);
         }
 
-        makeSeries("Agua", "agua", "#ffae00");
-        makeSeries("Temperatura", "temperatura", "#f5002c");
+        makeSeries("Agua", "agua", "#b8eff8");
+        makeSeries("Temperatura", "temperatura", "#f5a3b0");
 
         // Make stuff animate on load
         chart.appear(1000, 100);
@@ -605,7 +605,7 @@
             legend.data.push(series);
         }
 
-        makeSeries("Pasos", "pasos", "#ffae00");
+        makeSeries("Pasos", "pasos", "#a0404b");
         // Make stuff animate on load
         chart.appear(1000, 100);
 
@@ -765,11 +765,11 @@
 
 </div>
 <div class="chart-container-1">
-    <h2 class="chart-title">Estados de ánimo</h2>
+    <h2 class="chart-title">% de estados de ánimos este mes</h2>
     <div id="chartdivanimo" class="chart"></div>
 </div>
 <div class="chart-container-1">
-    <h2 class="chart-title">Síntomas</h2>
+    <h2 class="chart-title">% de estados de síntomas este mes</h2>
     <div id="chartdivsintomas" class="chart"></div>
 </div>
 <div class="info-box">

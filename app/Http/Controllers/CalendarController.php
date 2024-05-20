@@ -21,11 +21,16 @@ class CalendarController extends Controller
         // Obtener las fechas de período del usuario autenticado
         $fechasPeriodo = FechaPeriodo::where('user_id', $userId)->get();
 
+        // Instanciar el controlador de noticias
+        $noticiasController = new NoticiasController();
+
+        // Obtener solo las imágenes de las noticias filtradas por síntomas
+        $imagenesNoticiasFiltradas = $noticiasController->filtrarNoticiasPorSintomas();
+
         // Obtener la opción de ánimo seleccionada aleatoriamente
         $opcionAnimoRandom = $this->obtenerOpcionAnimoUsuarioHoy();
 
-        return view('calendar', compact('eventos', 'fechasPeriodo', 'opcionAnimoRandom'));
-
+        return view('calendar', compact('eventos', 'fechasPeriodo', 'opcionAnimoRandom', 'imagenesNoticiasFiltradas'));
     }
     public function obtenerOpcionesAnimoConFoto()
     {
