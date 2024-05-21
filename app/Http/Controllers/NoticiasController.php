@@ -14,15 +14,10 @@ class NoticiasController extends Controller
         // Obtener las opciones de síntomas del usuario para el día de hoy
         $opcionesSintomasHoy = $this->obtenerOpcionesSintomasUsuarioHoy();
 
-        // Obtener las primeras tres letras de cada opción de síntoma
-        $primerasTresLetras = $opcionesSintomasHoy->map(function ($opcion) {
-            return substr($opcion, 0, 3);
-        });
-
         // Realizar la búsqueda de noticias en la base de datos
-        $noticiasFiltradas = Noticia::where(function ($query) use ($primerasTresLetras) {
-            foreach ($primerasTresLetras as $letras) {
-                $query->orWhere('nombre', 'like', "%{$letras}%");
+        $noticiasFiltradas = Noticia::where(function ($query) use ($opcionesSintomasHoy) {
+            foreach ($opcionesSintomasHoy as $sintoma) {
+                $query->orWhere('nombre', 'like', "%{$sintoma}%");
             }
         })->get();
 
@@ -32,8 +27,6 @@ class NoticiasController extends Controller
         // Retornamos las imágenes de las noticias filtradas
         return $imagenesNoticiasFiltradas;
     }
-
-
 
     public function obtenerOpcionesSintomasUsuarioHoy()
     {
