@@ -83,31 +83,38 @@ $(document).ready(function () {
         $('#perfilModal').modal('show');
     });
 });
+$(document).ready(function() {
+    $('.circle-img').click(function() {
+        var perfil = $(this).attr('src'); // Obtener el nombre de la imagen (perfil)
+        $('#avatarSeleccionado').val(perfil); // Establecer el valor en el campo oculto del formulario
 
-$(document).ready(function () {
-    // Agregar evento de mostrado del modal
-    $('#perfilModal').on('shown.bs.modal', function () {
-        // Manejar el clic en las imágenes dentro del modal
-        $('#perfilModal .carousel-item img').click(function () {
-            // Obtener la ruta de la imagen
-            var rutaImagen = $(this).attr('src');
+        // Obtener el token CSRF
+        var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
-            // Mostrar un aviso en pantalla
-            alert("¡Has seleccionado esta imagen como tu avatar!");
-
-            // Preguntar al usuario si está seguro
-            if (confirm("¿Estás seguro de seleccionar esta imagen como tu avatar?")) {
-                // Extraer el nombre de la imagen de la ruta
-                var nombreImagen = rutaImagen.substring(rutaImagen.lastIndexOf('/') + 1);
-
-                // Establecer el valor del campo oculto con el nombre de la imagen
-                $('#avatarSeleccionado').val(nombreImagen);
-
-                // Enviar el formulario de avatar
-                $('#avatar').submit();
+        // Realizar una solicitud AJAX para enviar el nombre de la imagen al servidor
+        $.ajax({
+            type: "POST",
+            url: "/upload-avatar",
+            data: {
+                perfil: perfil,
+                _token: csrfToken // Incluir el token CSRF en la solicitud
+            },
+            success: function(response) {
+                // Verifica si la actualización fue exitosa
+                if (response.success) {
+                    // Recarga la página después de 1 segundo
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1000);
+                } else {
+                    // Maneja el caso en que la actualización no fue exitosa
+                    console.error(response.error);
+                }
+            },
+            error: function(xhr, status, error) {
+                // Manejar errores si es necesario
+                console.error(error);
             }
         });
     });
 });
-
-

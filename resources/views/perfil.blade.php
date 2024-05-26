@@ -17,6 +17,8 @@
                              style="width: 100px; height: 100px; border-radius: 50%; border: 1px solid #A0404B; cursor: pointer; margin-bottom: 20px;">
                     @endif
                     <br>
+                <br>
+                <br>
                     <p style="color: #A0404B;">Nombre: {{ auth()->user()->nombre }}</p>
                     <p style="color: #A0404B;">Apellidos: {{ auth()->user()->apellidos }}</p>
                     <p style="color: #A0404B;">Fecha de

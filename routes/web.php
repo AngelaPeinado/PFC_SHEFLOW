@@ -58,7 +58,8 @@ Route::get('/perfil', [App\Http\Controllers\PerfilController::class, 'index'])->
 
 Route::post('/uploadPerfil', [App\Http\Controllers\PerfilController::class, 'uploadPerfil'])->name('uploadPerfil');
 
-Route::post('/uploadAvatar', [App\Http\Controllers\PerfilController::class, 'uploadAvatar'])->name('uploadAvatar');
+Route::post('/upload-avatar', [App\Http\Controllers\PerfilController::class, 'uploadAvatar'])->name('uploadAvatar');
+
 
 use App\Http\Controllers\RegistroDiarioController;
 
