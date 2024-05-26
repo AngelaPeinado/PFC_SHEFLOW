@@ -35,9 +35,7 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-
                 </ul>
-
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <!-- Authentication Links -->
@@ -49,7 +47,6 @@
                                 </div>
                             </li>
                         @endif
-
                         @if (Route::has('register'))
                             <li class="nav-item">
                                 <div class="nav-link-wrapper">
@@ -82,7 +79,6 @@
             </div>
         </div>
     </nav>
-
     <main class="py-4">
         @yield('content')
     </main>

@@ -13,29 +13,22 @@ class NoticiasController extends Controller
     {
         // Obtener las opciones de síntomas del usuario para el día de hoy
         $opcionesSintomasHoy = $this->obtenerOpcionesSintomasUsuarioHoy();
-
         // Realizar la búsqueda de noticias en la base de datos
         $noticiasFiltradas = Noticia::where(function ($query) use ($opcionesSintomasHoy) {
             foreach ($opcionesSintomasHoy as $sintoma) {
                 $query->orWhere('nombre', 'like', "%{$sintoma}%");
             }
         })->get();
-
         // Obtener solo las imágenes de las noticias filtradas
         $imagenesNoticiasFiltradas = $noticiasFiltradas->pluck('imagen');
-
         // Retornamos las imágenes de las noticias filtradas
         return $imagenesNoticiasFiltradas;
     }
 
     public function obtenerOpcionesSintomasUsuarioHoy()
     {
-        // Obtener el ID del usuario autenticado
         $userId = Auth::id();
-
-        // Obtener la fecha actual
         $fechaHoy = now()->toDateString();
-
         // Obtener las opciones de síntomas del usuario para el día de hoy
         $opcionesSintomasHoy = DB::table('pivote_sintomas')
             ->where('user_id', $userId)
@@ -44,12 +37,10 @@ class NoticiasController extends Controller
             ->distinct()
             ->get()
             ->pluck('opcion_sintoma_id');
-
         // Obtener los nombres de las opciones de síntomas
         $nombresSintomasHoy = DB::table('sintomas')
             ->whereIn('id', $opcionesSintomasHoy)
             ->pluck('opcion_sintoma');
-
         return $nombresSintomasHoy;
     }
 

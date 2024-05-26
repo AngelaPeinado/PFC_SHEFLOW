@@ -15,7 +15,6 @@ class FormController extends Controller
      * @return \Illuminate\Contracts\View\View
      */
     public function index() {
-        // Obtener el ID de usuario autenticado
         $userId = auth()->user()->id;
 
         // Verificar si existe un formulario asociado al usuario
@@ -23,26 +22,15 @@ class FormController extends Controller
 
         $calendarController = new CalendarController();
 
-        // Obtener la opción de ánimo aleatoria
         $opcionAnimoRandom = $calendarController->obtenerOpcionAnimoUsuarioHoy();
-
-        // Instanciar el controlador de noticias
         $noticiasController = new NoticiasController();
-
-        // Obtener solo las imágenes de las noticias filtradas por síntomas
         $imagenesNoticiasFiltradas = $noticiasController->filtrarNoticiasPorSintomas();
 
         // Redirigir al usuario según el formulario existente
         if ($formularioExistente) {
-            // Obtener el ID del usuario autenticado
             $userId = auth()->id();
-
-            // Obtener los eventos del usuario autenticado
             $eventos = Evento::where('user_id', $userId)->get();
-
-            // Obtener las fechas de período del usuario autenticado
             $fechasPeriodo = FechaPeriodo::where('user_id', $userId)->get();
-
             return view('calendar', compact('eventos', 'fechasPeriodo', 'opcionAnimoRandom','imagenesNoticiasFiltradas'));
         } else {
             return view('form'); // Redirigir a la página 'form'

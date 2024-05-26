@@ -33,8 +33,7 @@ class EstadisticasController extends Controller
         $mediaPasosSemanal = $this->mediaPasosSemanal($userId);
         $mediaAguaSemanal = $this->mediaAguaSemanal($userId);
         $mediaTemperaturaSemanal = $this->mediaTemperaturaSemanal($userId);
-        //dd($datosDiarios, $datosDiariosEjercicio);
-        // Pasar todos los datos a la vista
+
         return view('statistics', compact(
             'duracionCiclos',
             'datosCiclo',
@@ -123,27 +122,22 @@ class EstadisticasController extends Controller
 
     public function calcularDuracionMediaCicloMenstrual()
     {
-        // Obtener las duraciones de los ciclos
         $duracionCiclos = $this->obtenerDuracionCiclos();
         $numCiclos = count($duracionCiclos);
-
         // Si hay al menos un ciclo, calcular su duración media
         if ($numCiclos > 0) {
             // Inicializar la suma de las duraciones de los ciclos
             $sumaDuraciones = 0;
-
             // Sumar todas las duraciones de los ciclos
             foreach ($duracionCiclos as $ciclo) {
                 $sumaDuraciones += $ciclo['duracion'];
             }
-
             // Calcular la duración media de los ciclos
             $duracionMediaCiclo = $sumaDuraciones / $numCiclos;
         } else {
             // Si no hay ciclos, establecer la duración media como 0
             $duracionMediaCiclo = 0;
         }
-
         return $duracionMediaCiclo;
     }
 
@@ -152,7 +146,6 @@ class EstadisticasController extends Controller
     {
         // Calcular la duración media de todos los periodos
         $duracionMedia = FechaPeriodo::avg(\DB::raw('DATEDIFF(fechaPeriodo_fin, fechaPeriodo_inicio)'));
-
         // Devolver la duración media
         return $duracionMedia;
     }
@@ -170,7 +163,6 @@ class EstadisticasController extends Controller
 
         return $datosDiarios->toArray();
     }
-
     public function obtenerPDiarios($userId)
     {
         $datosDiarios = PivoteSintoma::select(
@@ -220,27 +212,19 @@ class EstadisticasController extends Controller
         $mediaTemperaturaSemanal = PivoteSintoma::where('user_id', $userId)
             ->whereBetween('fecha', [$inicioSemana, $finSemana])
             ->avg('temperatura');
-
         return $mediaTemperaturaSemanal;
     }
 
     public function obtenerOpcionesAnimoPorMes()
     {
-        // Obtener el mes actual del usuario
         $mesActual = date('m');
-
-        // Obtener las opciones del tipo de síntoma "Ánimo"
         $opcionesAnimo = DB::table('sintomas')
             ->select('opcion_sintoma')
             ->where('tipo_sintoma', 'Ánimo')
             ->get()
             ->pluck('opcion_sintoma')
             ->toArray();
-
-        // Inicializar el array para almacenar el recuento de cada opción
         $recuentoOpciones = [];
-
-        // Recorrer cada opción y obtener el recuento para el mes actual del usuario
         foreach ($opcionesAnimo as $opcion) {
             $recuento = DB::table('pivote_sintomas')
                 ->where('opcion_sintoma_id', function ($query) use ($opcion) {
@@ -251,8 +235,6 @@ class EstadisticasController extends Controller
                 })
                 ->whereMonth('fecha', '=', $mesActual)
                 ->count();
-
-            // Almacenar la opción y el recuento en el array asociativo
             $recuentoOpciones[] = [
                 'opcion' => $opcion,
                 'recuento' => $recuento
@@ -265,21 +247,14 @@ class EstadisticasController extends Controller
 
     public function obtenerOpcionesSintomasPorMes()
     {
-        // Obtener el mes actual del usuario
         $mesActual = date('m');
-
-        // Obtener las opciones del tipo de síntoma "Síntomas"
         $opcionesSintomas = DB::table('sintomas')
             ->select('opcion_sintoma')
             ->where('tipo_sintoma', 'Síntomas')
             ->get()
             ->pluck('opcion_sintoma')
             ->toArray();
-
-        // Inicializar el array para almacenar el recuento de cada opción
         $recuentoOpciones = [];
-
-        // Recorrer cada opción y obtener el recuento para el mes actual del usuario
         foreach ($opcionesSintomas as $opcion) {
             $recuento = DB::table('pivote_sintomas')
                 ->where('opcion_sintoma_id', function ($query) use ($opcion) {
@@ -290,8 +265,6 @@ class EstadisticasController extends Controller
                 })
                 ->whereMonth('fecha', '=', $mesActual)
                 ->count();
-
-            // Almacenar la opción y el recuento en el array asociativo
             $recuentoOpciones[] = [
                 'opcion' => $opcion,
                 'recuento' => $recuento
@@ -302,26 +275,20 @@ class EstadisticasController extends Controller
     }
     public function obtenerDatosEjercicio($userId)
     {
-
-        // Obtener el mes actual
         $mesActual = date('m');
-
         // Obtener los datos de fatiga, molestias y motivación para cada día del mes actual
         $estadisticasEjercicio = DB::table('pivote_ejercicios')
-            ->select(DB::raw('MIN(created_at) as fecha'), DB::raw('MIN(fatiga) AS fatiga'), DB::raw('MIN(molestias) AS molestias'), DB::raw('MIN(motivacion) AS motivacion'))
+            ->select(DB::raw('DATE(created_at) as fecha'), DB::raw('MIN(fatiga) AS fatiga'), DB::raw('MIN(molestias) AS molestias'), DB::raw('MIN(motivacion) AS motivacion'))
             ->where('user_id', $userId)
             ->whereMonth('created_at', $mesActual)
             ->whereNotNull('fatiga')
             ->whereNotNull('molestias')
             ->whereNotNull('motivacion')
-            ->groupBy('fecha')
+            ->groupBy(DB::raw('DATE(created_at)')) // Agrupar por fecha sin incluir la hora
             ->get()
-            ->toArray(); // Convertir la colección a un array de PHP
+            ->toArray();
 
         return $estadisticasEjercicio;
     }
-
-
-
 
 }

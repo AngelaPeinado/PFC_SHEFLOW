@@ -230,6 +230,25 @@ input[type="radio"].form-check-input:checked {
     color: #333; /* Color del texto */
 }
 
+/* Estilos adicionales para aumentar el tamaño del texto de las respuestas */
+.check-label {
+    font-size: 1rem; /* Tamaño de fuente más grande */
+}
+
+.form-label.fs-5 {
+    font-size: 1rem; /* Tamaño de fuente más grande */
+}
+
+/* Otras etiquetas de formulario que puedan necesitar un tamaño de fuente más grande */
+textarea {
+    font-size: 1rem; /* Tamaño de fuente más grande */
+}
+
+/* Estilo para la primera letra en mayúscula */
+.check-label::first-letter {
+    text-transform: uppercase;
+}
+
 h1 {
     font-family: 'Nunito', sans-serif; /* Fuente del encabezado */
     font-size: 2.5rem; /* Tamaño del encabezado */

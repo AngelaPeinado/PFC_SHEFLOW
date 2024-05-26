@@ -96,7 +96,6 @@
                         <label for="notas" class="form-label fs-5">Notas:</label>
                         <textarea placeholder="Escribe alguna nota" id="notas" name="notas" rows="4"
                                   style="overflow: hidden; word-wrap: break-word; resize: none; height: 160px; "></textarea>
-
                     </div>
                 </div>
             </div>

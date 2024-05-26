@@ -141,7 +141,7 @@
             }
 
             function deleteEvent(eventId) {
-                console.log('Deleting event with ID:', eventId); // Agrega este registro de depuración
+                console.log('Deleting event with ID:', eventId);
                 $.ajax({
                     url: '/events/' + eventId,
                     type: 'DELETE',
@@ -490,7 +490,6 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-
     <!------------------------------------------------------------->
     @if ($imagenesNoticiasFiltradas->isNotEmpty())
         <hr class="linea" style="margin: 20px 0;">

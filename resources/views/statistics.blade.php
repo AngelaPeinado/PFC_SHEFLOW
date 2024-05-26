@@ -614,10 +614,7 @@
 <script>
     am5.ready(function () {
 
-        // Create root element
         var root = am5.Root.new("chartdivejercicio");
-
-        // Set themes
         root.setThemes([
             am5themes_Animated.new(root)
         ]);
@@ -719,19 +716,18 @@
             legend.data.push(series);
         }
 
-        makeSeries("Fatiga", "fatiga", "#ff0000");
-        makeSeries("Molestias", "molestias", "#00ff00");
-        makeSeries("Motivación", "motivacion", "#0000ff");
-        // Make stuff animate on load
+        makeSeries("Fatiga", "fatiga", "rgb(250,102,137)");
+        makeSeries("Molestias", "molestias", "#e52d3d");
+        makeSeries("Motivación", "motivacion", "#ffb3c3");
+
         chart.appear(1000, 100);
 
     }); // end am5.ready()
 </script>
-
 <div class="info-box">
     <h3>ESTADÍSTICAS: CICLOS Y PERIODOS</h3>
-    <p><strong>Duración media del ciclo:</strong> {{ $duracionMediaCiclo }} días</p>
-    <p><strong>Duración media del periodo:</strong> {{ $duracionMediaPeriodo }} días</p>
+    <p><strong>Duración media del ciclo:</strong> {{ number_format($duracionMediaCiclo, 2) }} días</p>
+    <p><strong>Duración media del periodo:</strong> {{ number_format($duracionMediaPeriodo, 2) }} días</p>
 </div>
 <div class="chart-container-wrapper">
     <div class="chart-container">
@@ -750,9 +746,9 @@
 </div>
 <div class="info-box">
     <h3>ESTADÍSTICAS: PASOS, CANTIDAD DE AGUA Y TEMPERATURA</h3>
-    <p><strong>Media semanal de pasos:</strong> {{ $mediaPasosSemanal }} pasos</p>
-    <p><strong>Media semanal de agua:</strong> {{ $mediaAguaSemanal }} litros</p>
-    <p><strong>Media semanal de temperatura:</strong> {{ $mediaTemperaturaSemanal }} ºC</p>
+    <p><strong>Media semanal de pasos:</strong> {{ number_format($mediaPasosSemanal,0) }} pasos</p>
+    <p><strong>Media semanal de agua:</strong> {{ number_format($mediaAguaSemanal, 2) }} litros</p>
+    <p><strong>Media semanal de temperatura:</strong> {{ number_format($mediaTemperaturaSemanal, 2) }} ºC</p>
 </div>
 <div class="chart-container-1">
     <div id="chartdivpasosdiarios" class="chart"></div>
@@ -769,7 +765,7 @@
     <div id="chartdivanimo" class="chart"></div>
 </div>
 <div class="chart-container-1">
-    <h2 class="chart-title">% de estados de síntomas este mes</h2>
+    <h2 class="chart-title">% de síntomas este mes</h2>
     <div id="chartdivsintomas" class="chart"></div>
 </div>
 <div class="info-box">

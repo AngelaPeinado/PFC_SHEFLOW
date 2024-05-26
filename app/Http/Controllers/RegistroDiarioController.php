@@ -18,12 +18,8 @@ class RegistroDiarioController extends Controller
     }
     public function registroDiarioSintomas()
     {
-        // Verificar si el usuario está autenticado
         if (auth()->check()) {
-            // Obtener el ID del usuario autenticado
             $userId = auth()->id();
-
-            // Verificar si hay un registro en la fecha de hoy en la tabla pivoteSintomas para el usuario autenticado
             $registroHoy = pivoteSintoma::whereDate('created_at', today())->where('user_id', $userId)->exists();
 
             // Si hay un registro hoy, redirigir a la página "RegistroDiarioHecho"
@@ -31,16 +27,9 @@ class RegistroDiarioController extends Controller
                 return redirect()->route('RegistroDiarioHecho');
             }
         }
-
-        // Si no hay registro hoy o el usuario no está autenticado, continuar con la lógica actual para mostrar la vista de registroDiarioSintomas
-
-        // Obtener todos los tipos de síntomas
         $tipo_sintomas = Sintoma::select('tipo_sintoma')->distinct()->get();
-
-        // Inicializar un array asociativo para almacenar las opciones de síntomas por tipo
         $opciones_por_tipo = [];
 
-        // Obtener las opciones de síntomas para cada tipo de síntoma
         foreach ($tipo_sintomas as $tipo_sintoma) {
             $opciones_por_tipo[$tipo_sintoma->tipo_sintoma] = Sintoma::where('tipo_sintoma', $tipo_sintoma->tipo_sintoma)->distinct()->pluck('opcion_sintoma');
         }

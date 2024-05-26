@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Auth::routes();
+// Verificar si el usuario está autenticado
+// Usuario autenticado, redirigir a la vista de calendario
+// Usuario no autenticado, mostrar la página de bienvenida
 
 Route::get('/', function () {
-    // Verificar si el usuario está autenticado
     if (auth()->check()) {
-        // Usuario autenticado, redirigir a la vista de calendario
         return redirect()->route('calendar.index');
     } else {
-        // Usuario no autenticado, mostrar la página de bienvenida
         return view('welcome');
     }
 });
