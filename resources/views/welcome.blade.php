@@ -31,7 +31,7 @@
                 </li>
                 <li class="nav-item">
                     <div class="nav-link-wrapper">
-                    <a class="nav-link" href="#">{{ __('About us') }}</a>
+                        <a class="nav-link" href="{{ route('about_us') }}">{{ __('About us') }}</a>
                     </div>
                 </li>
             </ul>

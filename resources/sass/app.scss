@@ -466,4 +466,66 @@ p {
     border-radius: 0 0 5px 0;
     border-bottom: 1px solid #444;
 }
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+}
 
+.custom-row {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.custom-column {
+    flex: 1;
+    padding: 75px;
+    display: flex;
+    flex-direction: column;
+}
+
+.custom-column h2 {
+    margin-bottom: 5px;
+}
+
+.custom-column p {
+    margin-bottom: 0;
+}
+
+.custom-column img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Invertir el orden de las columnas en dispositivos pequeños */
+@media (max-width: 768px) {
+    .custom-row {
+        flex-direction: column;
+    }
+}
+.text-container {
+    padding: 50px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+}
+.text-container ul {
+    list-style-type: none; /* Elimina los puntos de lista */
+    padding: 0; /* Elimina el padding */
+    margin: 0; /* Elimina el margin */
+}
+
+.text-container ul li {
+    font-size: 18px; /* Tamaño de fuente más grande */
+    line-height: 1.6; /* Altura de línea para mejor legibilidad */
+    margin-bottom: 10px; /* Espaciado entre elementos de la lista */
+    font-family: 'Nunito', sans-serif; /* Fuente profesional */
+}
+
+.text-container ul li::before {
+    content: "\2022"; /* Añade un punto antes de cada elemento de lista */
+    color: #333; /* Color del punto */
+    font-weight: bold; /* Negrita para el punto */
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}

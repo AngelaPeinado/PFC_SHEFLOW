@@ -74,5 +74,5 @@ Route::delete('/events/{id}', [App\Http\Controllers\EventoController::class, 'de
 
 use App\Http\Controllers\AboutUsController;
 
-Route::post('/AboutUs', [App\Http\Controllers\AboutUsController::class, 'index'])->name('AboutUs.index');
+Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 
