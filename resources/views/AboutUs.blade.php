@@ -44,14 +44,6 @@
                     <li>Colaboración: Trabajamos en equipo y en colaboración con expertos en salud para ofrecer contenido relevante y útil.</li>
                 </ul>
                 <br>
-                <h3>Nuestros Servicios</h3>
-                <br>
-                <ul>
-                    <li>Artículos educativos sobre salud femenina.</li>
-                    <li>Asesoramiento personalizado y consultas en línea.</li>
-                    <li>Herramientas y calculadoras para el seguimiento de la salud.</li>
-                    <li>Comunidad en línea para compartir experiencias y recibir apoyo.</li>
-                </ul>
                 <p><strong>Únete a SheFlow y comienza tu viaje hacia una vida más saludable y plena.</strong></p>
             </div>
         </div>
