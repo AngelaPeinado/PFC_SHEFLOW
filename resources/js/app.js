@@ -85,36 +85,30 @@ $(document).ready(function () {
 });
 $(document).ready(function() {
     $('.circle-img').click(function() {
-        var perfil = $(this).attr('src'); // Obtener el nombre de la imagen (perfil)
-        $('#avatarSeleccionado').val(perfil); // Establecer el valor en el campo oculto del formulario
-
-        // Obtener el token CSRF
+        var perfil = $(this).attr('src'); // Obtenemos el nombre de la imagen (perfil)
+        $('#avatarSeleccionado').val(perfil); // Establecemos el valor en el campo oculto del formulario
         var csrfToken = $('meta[name="csrf-token"]').attr('content');
-
         // Realizar una solicitud AJAX para enviar el nombre de la imagen al servidor
         $.ajax({
             type: "POST",
             url: "/upload-avatar",
             data: {
                 perfil: perfil,
-                _token: csrfToken // Incluir el token CSRF en la solicitud
+                _token: csrfToken //Incluir el token CSRF en la solicitud
             },
             success: function(response) {
-                // Verifica si la actualización fue exitosa
                 if (response.success) {
-                    // Recarga la página después de 1 segundo
                     setTimeout(function() {
                         window.location.reload();
-                    }, 1000);
+                    }, 100);
                 } else {
-                    // Maneja el caso en que la actualización no fue exitosa
                     console.error(response.error);
                 }
             },
             error: function(xhr, status, error) {
-                // Manejar errores si es necesario
                 console.error(error);
             }
         });
     });
 });
+

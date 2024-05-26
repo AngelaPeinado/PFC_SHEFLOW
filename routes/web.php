@@ -71,3 +71,8 @@ Route::get('/registro-diario-hecho', [RegistroDiarioController::class, 'registro
 
 Route::put('/events/{id}', [App\Http\Controllers\EventoController::class, 'update'])->name('events.update');
 Route::delete('/events/{id}', [App\Http\Controllers\EventoController::class, 'destroy'])->name('events.destroy');
+
+use App\Http\Controllers\AboutUsController;
+
+Route::post('/AboutUs', [App\Http\Controllers\AboutUsController::class, 'index'])->name('AboutUs.index');
+
