@@ -10,10 +10,8 @@ class EventoController extends Controller
 {
     public function index()
     {
-        // Obtener eventos del usuario actual
         $events = Evento::where('user_id', Auth::id())->get();
 
-        // Pasar los eventos a la vista del calendario
         return view('calendar.index', compact('events'));
     }
 
@@ -37,14 +35,10 @@ class EventoController extends Controller
         return redirect()->route('calendar.index')->with('success', 'Evento agregado exitosamente.');
     }
 
-    // Dentro de tu controlador EventoController.php
-
     public function update(Request $request, $id)
     {
-        // Buscar el evento por ID
         $evento = Evento::findOrFail($id);
 
-        // Validar los datos entrantes
         $request->validate([
             'Evento' => 'required|string',
             'Descripcion' => 'required|string',
@@ -52,7 +46,6 @@ class EventoController extends Controller
             'end_date' => 'nullable|date|after_or_equal:start_date',
         ]);
 
-        // Actualizar el evento
         $evento->update([
             'Evento' => $request->input('Evento'),
             'Descripcion' => $request->input('Descripcion'),
@@ -60,7 +53,6 @@ class EventoController extends Controller
             'end_date' => $request->input('end_date'),
         ]);
 
-        // Retornar una respuesta exitosa
         return response()->json(['success' => 'Evento actualizado exitosamente.']);
     }
 
@@ -70,7 +62,6 @@ class EventoController extends Controller
         $evento = Evento::findOrFail($id);
         $evento->delete();
 
-        // Devuelve una respuesta JSON indicando que el evento se ha eliminado
         return response()->json(['success' => true]);
     }
 
