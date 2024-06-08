@@ -92,7 +92,7 @@
                 },
                 eventResize: function (info) {
                     updateEvent(info.event);
-                    console.log(info.event);
+                    console.log(info.event);event
                 },
                 eventDragStop: function (info) {
                     var deleteEl = document.getElementById('deleteEvent');
@@ -129,25 +129,44 @@
                     return `${d.getFullYear()}-${('0' + (d.getMonth() + 1)).slice(-2)}-${('0' + d.getDate()).slice(-2)} ${('0' + d.getHours()).slice(-2)}:${('0' + d.getMinutes()).slice(-2)}:${('0' + d.getSeconds()).slice(-2)}`;
                 };
 
-                $.ajax({
-                    url: '/events/' + event.id,
-                    type: 'PUT',
-                    data: {
-                        _token: '{{ csrf_token() }}',
-                        Evento: event.title,
-                        Descripcion: event.extendedProps.description,
-                        start_date: formatDate(event.start),
-                        end_date: formatDate(event.end),
-                    },
-                    success: function (response) {
-                        console.log('Evento actualizado', response);
-                    },
-                    error: function (error) {
-                        console.error('Error al actualizar el evento', error);
-                        console.error('Error details:', error.responseText);
-                    }
-                });
+                if (event.title === 'Período') {
+                    $.ajax({
+                        url: '/periods/' + event.id,
+                        type: 'PUT',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            start_date: formatDate(event.start),
+                            end_date: formatDate(event.end),
+                        },
+                        success: function (response) {
+                            console.log('Período actualizado', response);
+                        },
+                        error: function (error) {
+                            console.error('Error al actualizar el período', error);
+                        }
+                    });
+                }else {
+                    $.ajax({
+                        url: '/events/' + event.id,
+                        type: 'PUT',
+                        data: {
+                            _token: '{{ csrf_token() }}',
+                            Evento: event.title,
+                            Descripcion: event.extendedProps.description,
+                            start_date: formatDate(event.start),
+                            end_date: formatDate(event.end),
+                        },
+                        success: function (response) {
+                            console.log('Evento actualizado', response);
+                        },
+                        error: function (error) {
+                            console.error('Error al actualizar el evento', error);
+                            console.error('Error details:', error.responseText);
+                        }
+                    });
+                }
             }
+
 
             function deleteEvent(eventId) {
                 console.log('Deleting event with ID:', eventId);
