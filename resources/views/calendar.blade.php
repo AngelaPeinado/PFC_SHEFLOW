@@ -74,7 +74,9 @@
                         start: '{{ $fechaPeriodo->fechaPeriodo_inicio }}',
                         end: '{{ $fechaPeriodo->fechaPeriodo_fin }}',
                         color: '#9a001b',
-                        description: 'Período'
+                        description: 'Período',
+                        id: '{{ $fechaPeriodo->id }}',
+
                     },
                     @endforeach
                 ],
@@ -101,12 +103,19 @@
                     console.log('Event Drag Stop', x, y);
                     console.log('Delete Element Position', deleteElRect);
 
+                    // Verifica si la posición del ratón está dentro del área de eliminación
                     if (x >= deleteElRect.left && x <= deleteElRect.right && y >= deleteElRect.top && y <= deleteElRect.bottom) {
-                        console.log('Event inside delete area');
-                        calendar.getEventById(info.event.id).remove();
-                        deleteEvent(info.event.id);
-                    } else {
-                        console.log('Event outside delete area');
+                        console.log('Elemento dentro del área de eliminación');
+
+                        if (info.event.title !== 'Período') {
+                            // Es un evento, elimínalo
+                            calendar.getEventById(info.event.id).remove();
+                            deleteEvent(info.event.id);
+                        } else {
+                            // Es un período, elimínalo
+                            calendar.getEventById(info.event.id).remove();
+                            deletePeriod(info.event.id); // Suponiendo que cada elemento de fecha de período tiene un atributo 'data-period-id' con el ID del período
+                        }
                     }
                 }
             });
@@ -156,7 +165,27 @@
                     }
                 });
             }
-        });
+
+            function deletePeriod(periodId) {
+                console.log('Eliminando período con ID:', periodId);
+                $.ajax({
+                    url: '/periods/' + periodId, // Ruta que maneja la eliminación del período en tu backend
+                    type: 'DELETE',
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function (response) {
+                        console.log('Período eliminado', response);
+                        // Actualiza la vista del calendario después de eliminar el período
+                        calendar.refetchEvents();
+                    },
+                    error: function (error) {
+                        console.error('Error al eliminar el período', error);
+                    }
+                });
+            }
+        })
+        ;
     </script>
 
 </head>
@@ -274,7 +303,8 @@
         <div class="col-md-3">
             <div class="custom-container">
                 <div class="text-center mb-4">
-                    <img src="SheFlowDeletee.png" id="deleteEvent" class="img-fluid mb-3" alt="Eliminar" style="max-width: 40px;" title="Arrastra evento para eliminar">
+                    <img src="SheFlowDeletee.png" id="deleteEvent" class="img-fluid mb-3" alt="Eliminar"
+                         style="max-width: 40px;" title="Arrastra evento para eliminar">
                 </div>
                 <hr>
                 <br>
@@ -511,11 +541,13 @@
                     </div>
                 @endforeach
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselRecomendaciones" data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselRecomendaciones"
+                    data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselRecomendaciones" data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselRecomendaciones"
+                    data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -523,7 +555,6 @@
     @endif
     <hr class="linea" style="margin: 20px 0;">
     <br>
-
 
 
 </div>

@@ -59,5 +59,15 @@ class PeriodoController extends Controller
         return redirect()->route('calendar.index')->with('success', 'Fecha de período guardada exitosamente.');
     }
 
+    // In PeriodoController.php
+    public function destroy($id)
+    {
+        $fechaPeriodo = FechaPeriodo::find($id);
+        $fechaPeriodo->delete();
+
+        // Devuelve una respuesta JSON indicando que el evento se ha eliminado
+        return response()->json(['success' => true]);
+    }
+
 }
 

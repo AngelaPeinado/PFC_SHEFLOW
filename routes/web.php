@@ -76,3 +76,8 @@ use App\Http\Controllers\AboutUsController;
 
 Route::get('/about-us', [AboutUsController::class, 'index'])->name('about_us');
 
+// In web.php or api.php (depending on where your routes are)
+
+Route::delete('/periods/{id}', [PeriodoController::class, 'destroy'])->name('periods.destroy');
+
+
