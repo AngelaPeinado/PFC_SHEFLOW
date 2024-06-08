@@ -24,7 +24,7 @@
             <div class="row">
                 @foreach($tipo_sintomas as $tipo_sintoma)
                     <div class="col-md-3">
-                        <div class="card-custom mb-4 "> <!-- Agregar la clase card-custom aquí -->
+                        <div class="card-custom mb-4">
                             <div class="card-body-custom">
                                 <label class="form-label fs-5">{{ $tipo_sintoma->tipo_sintoma }}:</label>
                                 @foreach($opciones_por_tipo[$tipo_sintoma->tipo_sintoma] as $opcion)
@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <label for="agua" class="form-label fs-5">Cantidad de Agua (en litros):</label>
                             <div class="number-input">
-                                <input type="number" id="agua" name="agua" min="0" max="10" value="0" required
+                                <input type="number" id="agua" name="agua" min="0" max="10" step="0.1" value="0" required
                                        class="form-control mb-3">
                                 <div class="buttons">
                                     <div class="increment-agua">+</div>
@@ -79,9 +79,8 @@
                         <div class="card-body">
                             <label for="temperatura" class="form-label fs-5">Temperatura (en °C):</label>
                             <div class="number-input">
-                                <input type="number" id="temperatura" name="temperatura" min="30" max="45" value="36"
-                                       required
-                                       class="form-control mb-3">
+                                <input type="number" id="temperatura" name="temperatura" min="30" max="45" step="0.1"
+                                       value="36" required class="form-control mb-3">
                                 <div class="buttons">
                                     <div class="increment-temperatura">+</div>
                                     <div class="decrement-temperatura">-</div>
@@ -95,12 +94,12 @@
                     <div class="card-body">
                         <label for="notas" class="form-label fs-5">Notas:</label>
                         <textarea placeholder="Escribe alguna nota" id="notas" name="notas" rows="4"
-                                  style="overflow: hidden; word-wrap: break-word; resize: none; height: 160px; "></textarea>
+                                  style="overflow: hidden; word-wrap: break-word; resize: none; height: 160px;"></textarea>
                     </div>
                 </div>
             </div>
             <hr>
-            <button type="submit" class="cta" id="guardarBtn"> <!-- Botón para iniciar el cuestionario -->
+            <button type="submit" class="cta" id="guardarBtn">
                 <span>{{ __('Enviar') }}</span>
                 <svg width="13px" height="10px" viewBox="0 0 13 10">
                     <path d="M1,5 L11,5"></path>
